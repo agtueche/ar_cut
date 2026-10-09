@@ -30,6 +30,10 @@ Ce dépôt contient le logiciel et son logo. Les rushs, voix, exports, caches et
 - [Protocole de montage des rushs](PROTOCOLE-MONTAGE-RUSHS.md)
 - [Documentation du moteur HyperFrames](README-UPSTREAM.md)
 
+## Automatisations amont
+
+Les workflows de publication et de maintenance propres au dépôt HyperFrames sont conservés dans `.github/upstream-workflows/`, hors du dossier exécuté par GitHub Actions. Ils ne sont pas activés automatiquement pour Ar cut.
+
 ## Origine et licences
 
 Le moteur et les fichiers issus de [HyperFrames](https://github.com/heygen-com/hyperframes) conservent leur licence Apache-2.0 et leurs notices ; voir [LICENSE](LICENSE). La licence MIT créée initialement pour Ar cut est conservée dans [LICENSE-AR-CUT](LICENSE-AR-CUT). Elle ne remplace pas les licences des composants tiers. Les adaptations locales concernent notamment l’interface Creator, les outils de montage, la sauvegarde et l’identité Ar cut.
