@@ -1,0 +1,88 @@
+import { basename, dirname, isAbsolute, join, relative, sep } from "node:path";
+import { readdirSync, type Dirent } from "node:fs";
+import { realpath, resolveWithinProject } from "@hyperframes/core/safe-path";
+
+// `isSafePath` lives at the package root so non-studio-api layers (compiler,
+// CLI, engine) can share it without a backwards dependency on studio-api.
+// Re-exported here for back-compat with existing `../helpers/safePath.js` imports.
+export {
+  folderGone,
+  isProjectRootMissing,
+  isSafePath,
+  mkdirWithinProject,
+  realpath,
+  realProjectRoot,
+  resolveWithinProject,
+} from "@hyperframes/core/safe-path";
+
+/** The real path; for a path not there (yet, or any more), the nearest existing folder's real path plus the rest. */
+export function realFilePath(filePath: string): string {
+  try {
+    return realpath(filePath);
+  } catch {
+    const dir = dirname(filePath);
+    return dir === filePath ? filePath : join(realFilePath(dir), basename(filePath));
+  }
+}
+
+/**
+ * `resolveWithinProject` with every link inside the project resolved now, so a write to the result lands on the
+ * file checked here even if a link on the way is retargeted before the write.
+ */
+export function pinWithinProject(base: string, relativePath: string): string | null {
+  const checked = resolveWithinProject(base, relativePath);
+  if (!checked) return null;
+  const inside = relative(realFilePath(base), realFilePath(checked));
+  const escapes = inside === ".." || inside.startsWith(`..${sep}`) || isAbsolute(inside);
+  return escapes ? null : join(base, inside);
+}
+
+const IGNORE_DIRS = new Set([
+  ".thumbnails",
+  ".transcode-cache",
+  ".waveform-cache",
+  "node_modules",
+  ".git",
+]);
+
+function shouldIgnoreDir(rel: string): boolean {
+  return rel === ".hyperframes/backup";
+}
+
+/**
+ * True when any directory segment of a relative path is a dot-directory or
+ * node_modules. Projects that vendor tooling assets under dot-directories
+ * (.hyperframes/, .cache/, …) ship example/preset HTML that must not surface
+ * as project compositions or studio lint targets (#1384). The file tree is
+ * deliberately not filtered — this only gates discovery.
+ */
+export function isInHiddenOrVendorDir(relPath: string): boolean {
+  const segments = relPath.split("/");
+  return segments.slice(0, -1).some((seg) => seg.startsWith(".") || seg === "node_modules");
+}
+
+const UNREADABLE_DIR_CODES = new Set(["EACCES", "EPERM", "ENOENT", "ENOTDIR"]);
+
+/** Recursively walk a directory and return relative file paths. A subfolder that is unreadable
+ * or removed mid-walk is skipped; any other failure, or an unreadable `dir` itself, throws. */
+export function walkDir(dir: string, prefix = ""): string[] {
+  let entries: Dirent[];
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (!prefix || !code || !UNREADABLE_DIR_CODES.has(code)) throw err;
+    return [];
+  }
+  const files: string[] = [];
+  for (const entry of entries) {
+    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (IGNORE_DIRS.has(entry.name) || shouldIgnoreDir(rel)) continue;
+    if (entry.isDirectory()) {
+      files.push(...walkDir(join(dir, entry.name), rel));
+    } else {
+      files.push(rel);
+    }
+  }
+  return files;
+}

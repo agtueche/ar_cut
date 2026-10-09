@@ -1,0 +1,9 @@
+{
+  "title": "Vidéo pédagogique",
+  "description": "Une leçon courte : titre, trois étapes animées, graphique et résumé.",
+  "category": "education",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "duration": 20
+}

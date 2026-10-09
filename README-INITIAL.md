@@ -1,0 +1,2 @@
+# Daniel Tueche
+AR Cut is a modern video editing application designed to simplify content creation, editing, and animation through an intuitive interface. The project aims to combine traditional video editing, motion design, automation, and AI-powered tools in a fast, flexible, and accessible environment. Using a simple prompt, provided footage, and audio, AR Cut can automatically generate a structured, edited video ready for final refinement.

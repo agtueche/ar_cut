@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Publicité produit</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #101318;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        color: #f4f7f6;
+      }
+      #bg-glow {
+        position: absolute;
+        left: 1060px;
+        top: 140px;
+        width: 800px;
+        height: 800px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0, 168, 150, 0.45), rgba(16, 19, 24, 0) 70%);
+      }
+      #product {
+        position: absolute;
+        left: 1210px;
+        top: 250px;
+        width: 500px;
+        height: 580px;
+        border-radius: 48px;
+        background: linear-gradient(160deg, #242c37, #191e26);
+        border: 2px solid rgba(0, 168, 150, 0.6);
+      }
+      #product-screen {
+        position: absolute;
+        left: 1260px;
+        top: 300px;
+        width: 400px;
+        height: 330px;
+        border-radius: 28px;
+        background: linear-gradient(135deg, #00a896, #ff6b35);
+      }
+      #product-name {
+        position: absolute;
+        left: 1260px;
+        top: 670px;
+        font-size: 44px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      #product-tag {
+        position: absolute;
+        left: 1260px;
+        top: 732px;
+        font-size: 24px;
+        color: #a7b2c2;
+      }
+      #headline {
+        position: absolute;
+        left: 160px;
+        top: 300px;
+        width: 900px;
+        font-size: 104px;
+        font-weight: 800;
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+      }
+      #subline {
+        position: absolute;
+        left: 160px;
+        top: 560px;
+        width: 820px;
+        font-size: 36px;
+        line-height: 1.35;
+        color: #a7b2c2;
+      }
+      .feature {
+        position: absolute;
+        left: 160px;
+        width: 860px;
+        height: 120px;
+        padding: 28px 36px;
+        border-radius: 24px;
+        background: #191e26;
+        border: 1px solid #242c37;
+        font-size: 40px;
+        font-weight: 700;
+      }
+      .feature span {
+        color: #00a896;
+        margin-right: 18px;
+      }
+      #feature-1 {
+        top: 260px;
+      }
+      #feature-2 {
+        top: 410px;
+      }
+      #feature-3 {
+        top: 560px;
+      }
+      #cta-title {
+        position: absolute;
+        left: 0;
+        top: 330px;
+        width: 1920px;
+        text-align: center;
+        font-size: 120px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      #cta-button {
+        position: absolute;
+        left: 710px;
+        top: 560px;
+        width: 500px;
+        height: 110px;
+        border-radius: 55px;
+        background: #ff6b35;
+        color: #101318;
+        font-size: 42px;
+        font-weight: 800;
+        text-align: center;
+        line-height: 110px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="15"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="bg-glow" class="clip" data-start="0" data-duration="11" data-track-index="0"></div>
+      <div id="product" class="clip" data-start="0" data-duration="6" data-track-index="1"></div>
+      <div id="product-screen" class="clip" data-start="0" data-duration="6" data-track-index="2"></div>
+      <div id="product-name" class="clip" data-start="0" data-duration="6" data-track-index="3">Nova One</div>
+      <div id="product-tag" class="clip" data-start="0" data-duration="6" data-track-index="4">Votre studio de poche</div>
+      <h1 id="headline" class="clip" data-start="0" data-duration="6" data-track-index="5">Créez plus, plus vite.</h1>
+      <p id="subline" class="clip" data-start="0" data-duration="6" data-track-index="6">Un appareil pensé pour les créateurs qui veulent passer de l'idée à la vidéo en quelques minutes.</p>
+      <div id="feature-1" class="feature clip" data-start="6" data-duration="5" data-track-index="7"><span>01</span>Montage instantané</div>
+      <div id="feature-2" class="feature clip" data-start="6" data-duration="5" data-track-index="8"><span>02</span>Autonomie de 12 heures</div>
+      <div id="feature-3" class="feature clip" data-start="6" data-duration="5" data-track-index="9"><span>03</span>Export 4K en un geste</div>
+      <h2 id="cta-title" class="clip" data-start="11" data-duration="4" data-track-index="10">Disponible dès aujourd'hui</h2>
+      <div id="cta-button" class="clip" data-start="11" data-duration="4" data-track-index="11">Découvrir</div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.fromTo("#bg-glow", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 1.4, ease: "power2.out" }, 0);
+      tl.fromTo(
+        ["#product", "#product-screen", "#product-name", "#product-tag"],
+        { opacity: 0, y: 80 },
+        { opacity: 1, y: 0, duration: 1, ease: "power3.out", stagger: 0.08 },
+        0.3,
+      );
+      tl.fromTo("#headline", { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.9, ease: "power3.out" }, 0.6);
+      tl.fromTo("#subline", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 1.2);
+      tl.to(["#product", "#product-screen", "#product-name", "#product-tag"], { y: -16, duration: 2.5, ease: "sine.inOut" }, 2.5);
+
+      tl.fromTo("#feature-1", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 6.2);
+      tl.fromTo("#feature-2", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 6.6);
+      tl.fromTo("#feature-3", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 7);
+
+      tl.fromTo("#cta-title", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.6)" }, 11.2);
+      tl.fromTo("#cta-button", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 11.8);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

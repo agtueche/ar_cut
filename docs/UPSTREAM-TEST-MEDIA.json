@@ -1,0 +1,862 @@
+{
+  "upstream": "https://github.com/heygen-com/hyperframes",
+  "revision": "061a5c0265202538352a9888518064ae4fbb191c",
+  "note": "Optional upstream regression-test and changelog-example media. Not needed to run Ar cut. Restore from upstream with Git LFS when running these media-specific tests. No personal episode media is included.",
+  "files": [
+    {
+      "path": ".agents/skills/changelog-video/assets/bg-pattern.mp4",
+      "size": 12817182,
+      "oid": "e6cdd36e1e57f0b8349088db97d813863e87a7b7974d472ad9efc904737039f2"
+    },
+    {
+      "path": ".agents/skills/changelog-video/assets/bgm.mp3",
+      "size": 5318438,
+      "oid": "5e86390155022691fa09a31a28e256a717aaf079d5f9ccbb5561d52ab8a49300"
+    },
+    {
+      "path": ".claude/skills/changelog-video/assets/bg-pattern.mp4",
+      "size": 12817182,
+      "oid": "e6cdd36e1e57f0b8349088db97d813863e87a7b7974d472ad9efc904737039f2"
+    },
+    {
+      "path": ".claude/skills/changelog-video/assets/bgm.mp3",
+      "size": 5318438,
+      "oid": "5e86390155022691fa09a31a28e256a717aaf079d5f9ccbb5561d52ab8a49300"
+    },
+    {
+      "path": "packages/producer/tests/nested-subcomp-depth-3/output/output.mp4",
+      "size": 29465,
+      "oid": "c2b2b6c191043eb5174c6a1e7bac6a09f13d53386144f4be363d9225d16b35aa"
+    },
+    {
+      "path": "packages/producer/tests/nested-subcomp-depth-3/output/compiled.html",
+      "size": 111160,
+      "oid": "4c8a5f2249dd4370bdd030517dd53ba977b623450a5c302d22aa121f99b1156f"
+    },
+    {
+      "path": "packages/producer/tests/style-10-prod/output/output.mp4",
+      "size": 11356525,
+      "oid": "4dcecc39634a51efe1709f75b016b1a90a8eeea72f31b3e15d5cae43dfc8021e"
+    },
+    {
+      "path": "packages/producer/tests/gsap-call-render-seek/output/output.mp4",
+      "size": 123087,
+      "oid": "5e8fd9d5f29443375a919d0229751f29c3b3e7da758d3bdec3e21f4546b25455"
+    },
+    {
+      "path": "packages/producer/tests/gsap-call-render-seek/output/compiled.html",
+      "size": 2563366,
+      "oid": "6d350fb3d1c2e01ed5c21a811d79cee3bfb61a0f713326ba2fb729ab43115d92"
+    },
+    {
+      "path": "packages/producer/tests/style-2-prod/output/output.mp4",
+      "size": 10991291,
+      "oid": "b2344fe8cbd76870b11b5ec8fa3affc3d7ec0f52d82f5c9d4d01620f1caad0a3"
+    },
+    {
+      "path": "packages/producer/tests/dogs-captions/output/output.mp4",
+      "size": 101062815,
+      "oid": "5be3b83cdeee44ffdb94ce9fd8790f0e5b4610956017c03aeed1108df324bb29"
+    },
+    {
+      "path": "packages/producer/tests/d3-adapter/output/output.mp4",
+      "size": 250658,
+      "oid": "0693b24a6fad50609f05c4b5ea103a4e533113703725e64d9244435a1b0dbdcc"
+    },
+    {
+      "path": "packages/producer/tests/sub-composition-video/output/output.mp4",
+      "size": 13521357,
+      "oid": "0634b075260874394d42dd959e998ca611e52fd812ef2bd54f2f239c4ce18d35"
+    },
+    {
+      "path": "packages/producer/tests/speed-ramp/output/output.mp4",
+      "size": 277335,
+      "oid": "a0aa5f4a6c032286630b386ea53feea7739a8deef5792a4c770bff54ebf171ae"
+    },
+    {
+      "path": "packages/producer/tests/speed-ramp/output/compiled.html",
+      "size": 1538,
+      "oid": "a57005fa99beb428b604d59d460e42751b0b693dda9e5c9919939456799c4e56"
+    },
+    {
+      "path": "packages/producer/tests/speed-ramp/src/assets/counter.mp4",
+      "size": 69954,
+      "oid": "1467134ba4c95ed21541c4fc50ead4755e39f6c25292b8bc1976e19e21b67829"
+    },
+    {
+      "path": "packages/producer/tests/raf-ball-render-compat/output/output.mp4",
+      "size": 169122,
+      "oid": "c43b346547ccc03bd4056e97efcff30ff4e2061de46b21e90541e65630e32e9f"
+    },
+    {
+      "path": "packages/producer/tests/style-3-prod/output/output.mp4",
+      "size": 7144977,
+      "oid": "463b1034d15bd54b7c44ddfbed9620f045c329c3bf4f665ec104fc5cb2b26c39"
+    },
+    {
+      "path": "packages/producer/tests/style-11-prod/output/output.mp4",
+      "size": 9691483,
+      "oid": "eb3a6b30836d6fc79c1e9c55ad78baf663f5f5cf32d966343b5068bb84d16043"
+    },
+    {
+      "path": "packages/producer/tests/iframe-render-compat/output/output.mp4",
+      "size": 375998,
+      "oid": "cfc17083ef256c59fb9ece1146e9a70cdc9dabf67a9dfa03301b1708ff49b1cc"
+    },
+    {
+      "path": "packages/producer/tests/fast-capture-gsap/output/output.mp4",
+      "size": 120088,
+      "oid": "8974304164d6698be0fe168be5f485e3076cf32981565f343996b749a7352c7c"
+    },
+    {
+      "path": "packages/producer/tests/chat/output/output.mp4",
+      "size": 887615,
+      "oid": "d002c0d9d9851ec6abce1c662ed7a0a7b78b993ec778650a9aca4a437edb4080"
+    },
+    {
+      "path": "packages/producer/tests/google-maps-adapter/output/output.mp4",
+      "size": 155771,
+      "oid": "5a9fe32ca9852e9702e387332f9bc871314d2048fc19cd544db73fb169d18ae0"
+    },
+    {
+      "path": "packages/producer/tests/font-variant-numeric/output/output.mp4",
+      "size": 184768,
+      "oid": "18cd0f3a92bce5740b5490498b50ea0e4f2277b7660fe31c4e496aef21cc81d2"
+    },
+    {
+      "path": "packages/producer/tests/spanish-empire-cdn-inline/output/output.mp4",
+      "size": 9577196,
+      "oid": "0c7425c1bf5673644bd30378f5f8bfc82cbdc5d186f732758d025bee6d32ce17"
+    },
+    {
+      "path": "packages/producer/tests/css-spinner-render-compat/output/output.mp4",
+      "size": 227604,
+      "oid": "d49bbe3e2b472d48c2c88ab5f10fd9111147cf77536149def51fef5232b10bb7"
+    },
+    {
+      "path": "packages/producer/tests/timed-descendant-visibility/output/output.mp4",
+      "size": 20401,
+      "oid": "8394303d13bead5195ad75144d0c6b82b5bd5bb931d6bee0775e20a142cd1eff"
+    },
+    {
+      "path": "packages/producer/tests/distributed/mp4-h265-sdr/output/output.mp4",
+      "size": 59699,
+      "oid": "c62e51a616e24c4ba16504a8508bafa58866bd3dabc68cbf32076a49eabb53bd"
+    },
+    {
+      "path": "packages/producer/tests/distributed/mp4-h264-sdr/output/output.mp4",
+      "size": 62079,
+      "oid": "6c6137ec9cb1117e09d8da79b0dc18d160bdc750d5311e3752c353046ccac7f2"
+    },
+    {
+      "path": "packages/producer/tests/distributed/three-boundary/output/output.mp4",
+      "size": 22114,
+      "oid": "cc8c784064e83a62324b4968ef71d3f9c5e151ccf9f3e96a725660bb6c9bb3b9"
+    },
+    {
+      "path": "packages/producer/tests/distributed/mov-prores/output/output.mov",
+      "size": 3817784,
+      "oid": "0f30a6406f027320d6b2c90f5dda2a970690d770dbb6be5cd549cf02a941a2fd"
+    },
+    {
+      "path": "packages/producer/tests/distributed/webm-vp9/output/output.webm",
+      "size": 78674,
+      "oid": "44d40fa4cd520eb59966ada4ef3eff70f5125fa580408dfd488e10ec883cd0b3"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000048.png",
+      "size": 9225,
+      "oid": "d59aeeb98bc0e222a85b3cf2dbaa0a459f71369df0d6912a5f9c7427d55b6eeb"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000060.png",
+      "size": 9200,
+      "oid": "c9231aef5a6d2e0e068e2302f737aa2e6bc8712375cfc2d688fc555244aa305f"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000049.png",
+      "size": 9245,
+      "oid": "0dbc4b75d2ad7fe802dc0a4106e49b5d1e8a1ccac7ee776472ba775cbd60d7d2"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000059.png",
+      "size": 9227,
+      "oid": "10a38b7a82b4ea3a811df11e3d20327831320e6b2fded6b13fef97cacb364f56"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000058.png",
+      "size": 9228,
+      "oid": "2e46da88b70cdcefc05c70c22dac9ea7b08dea93688d115bab4213f5a3cdd021"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000028.png",
+      "size": 8398,
+      "oid": "61c47873580f16de9922dec4b19ca1bf34b5ce480c103e48f038355fdce8c252"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000014.png",
+      "size": 8399,
+      "oid": "89cc2f611c8afaea97879d2311ac41ca3d6f728924335488bdff76f1f69e4a74"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000015.png",
+      "size": 8368,
+      "oid": "98733769a8c36238b863207a7fd9f3bfcc2a95901dbd3c65f12f1c5d99147942"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000001.png",
+      "size": 8405,
+      "oid": "2c8fe979b1f7614e3d06a8621676000d490385e24e4e1621220d7fa6d7e7c40c"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000029.png",
+      "size": 10395,
+      "oid": "d5bf52c45df6687b9d451c20969b68156e3cf6e2d9d874deae3f7039d6c063d8"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000017.png",
+      "size": 8344,
+      "oid": "7cecfecfcad984b84f37c98aac469b5088cf1838ec139308a2436d2f66132bb0"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000003.png",
+      "size": 8396,
+      "oid": "4e53ac26c104549f98da2950cde3cddf43eaeb9150c998d16cd7678407d711f4"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000002.png",
+      "size": 8344,
+      "oid": "7cecfecfcad984b84f37c98aac469b5088cf1838ec139308a2436d2f66132bb0"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000016.png",
+      "size": 8404,
+      "oid": "1ad508241741f5771b21b6498b7f4703e1bd6cd8252c528916fc0af23efcdedb"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000012.png",
+      "size": 8422,
+      "oid": "a3c69154985fdc1043390eebaa4d30b44bc92c3b74164eb67fb112b5d8effd81"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000006.png",
+      "size": 8410,
+      "oid": "96d6ddaa8bbe846979a83cf9aa4bd9af9106a1f85ada8c98964b3beb99ab3a89"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000007.png",
+      "size": 8406,
+      "oid": "31b703390dd59b9445f80ee1dac7873362d8611be57b3441384b88a5ca0ae449"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000013.png",
+      "size": 8398,
+      "oid": "61c47873580f16de9922dec4b19ca1bf34b5ce480c103e48f038355fdce8c252"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000005.png",
+      "size": 8417,
+      "oid": "4e0ec183b32beaeb1e1b01c8e3ba5e7003c227932a4c036ae9a1563e1da6ada8"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000011.png",
+      "size": 8427,
+      "oid": "622d7668e2a1e0c17287ec2d11ae0ff93eda379efe528d5e4155896e9d2c6e88"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000039.png",
+      "size": 9273,
+      "oid": "83c247fd13d07740228c0835e9178b27e6cf63c1d4cd5e63325ec3ef1acc27e8"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000038.png",
+      "size": 9227,
+      "oid": "f94aab160693cdd825fbd21861c259af97cbcce360492016d86c3e02708b539a"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000010.png",
+      "size": 8408,
+      "oid": "61dd2296c82b8119cbbc465aabc68ccac3bcd6f498de1130040e9b7a1c6fc787"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000004.png",
+      "size": 8416,
+      "oid": "a86a99076e623e516e4e0d40957858715cd482c42c64429410af3edc46a6e0b5"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000009.png",
+      "size": 8445,
+      "oid": "89e4158e319fa0c19179fe17e6f2916b8e3298a518a2e4ef14f56f9ed1bdadd8"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000021.png",
+      "size": 8410,
+      "oid": "96d6ddaa8bbe846979a83cf9aa4bd9af9106a1f85ada8c98964b3beb99ab3a89"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000035.png",
+      "size": 9244,
+      "oid": "4c29bf3d3e3ea398e4d64f3693453d60f7bf64c4ef15fbfa48cc22d601201767"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000034.png",
+      "size": 9245,
+      "oid": "0dbc4b75d2ad7fe802dc0a4106e49b5d1e8a1ccac7ee776472ba775cbd60d7d2"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000020.png",
+      "size": 8417,
+      "oid": "4e0ec183b32beaeb1e1b01c8e3ba5e7003c227932a4c036ae9a1563e1da6ada8"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000008.png",
+      "size": 8398,
+      "oid": "22e34e2d2424bd023ce9ca482eb0c3522e61e61a5de8ef6f033fc6139eb92ebb"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000036.png",
+      "size": 9242,
+      "oid": "4fa10ad6257fe31e1b9c81ea52063d5b5da325a44b24bfeda6953b2ddc14d1d9"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000022.png",
+      "size": 8406,
+      "oid": "31b703390dd59b9445f80ee1dac7873362d8611be57b3441384b88a5ca0ae449"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000023.png",
+      "size": 8398,
+      "oid": "22e34e2d2424bd023ce9ca482eb0c3522e61e61a5de8ef6f033fc6139eb92ebb"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000037.png",
+      "size": 9235,
+      "oid": "495ae065c8a8304f4df59a53e0d332f2c824f9341b1a8e32e0890119781e7088"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000033.png",
+      "size": 10655,
+      "oid": "c751612b99b89a68a4df1197d33f4f1d37a8736d2ec7281f0ac1508e8a6cd220"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000027.png",
+      "size": 8422,
+      "oid": "a3c69154985fdc1043390eebaa4d30b44bc92c3b74164eb67fb112b5d8effd81"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000026.png",
+      "size": 8432,
+      "oid": "c45da04f586c07028086eef8cd3ead7dc04aff6ef006cb790172b1cff67269a8"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000032.png",
+      "size": 10615,
+      "oid": "58a079d607c6cb724dab763d037dc2548dc94df343bd40501ab4de3f123f5593"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000024.png",
+      "size": 8445,
+      "oid": "89e4158e319fa0c19179fe17e6f2916b8e3298a518a2e4ef14f56f9ed1bdadd8"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000030.png",
+      "size": 10523,
+      "oid": "e8165d3119b888b3c4041b6c7cdf4d039ad9f204ff3fd35f36cb6f770ffd5814"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000018.png",
+      "size": 8396,
+      "oid": "4e53ac26c104549f98da2950cde3cddf43eaeb9150c998d16cd7678407d711f4"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000019.png",
+      "size": 8416,
+      "oid": "a86a99076e623e516e4e0d40957858715cd482c42c64429410af3edc46a6e0b5"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000031.png",
+      "size": 10623,
+      "oid": "92d3dac97db2a296e60de2522d9ddbd1f649c665520d92a18ad6600aaa99b970"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000025.png",
+      "size": 8408,
+      "oid": "61dd2296c82b8119cbbc465aabc68ccac3bcd6f498de1130040e9b7a1c6fc787"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000042.png",
+      "size": 9250,
+      "oid": "5ea5f4a96aaaf66d2d755ece02e604999d205902b44083114823019683bc676b"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000056.png",
+      "size": 9254,
+      "oid": "54390e9396df7e83ee2ce07bf176cb8e28f01d3be7482005f8b3f251b675e232"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000057.png",
+      "size": 9250,
+      "oid": "5ea5f4a96aaaf66d2d755ece02e604999d205902b44083114823019683bc676b"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000043.png",
+      "size": 9228,
+      "oid": "2e46da88b70cdcefc05c70c22dac9ea7b08dea93688d115bab4213f5a3cdd021"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000055.png",
+      "size": 9234,
+      "oid": "6e1cb2ee6901f48c2580f5c33af36889d0d9e64ba9f2c27a8e4f4d0fe2e7d284"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000041.png",
+      "size": 9257,
+      "oid": "8df6ed44ed7d20850076a63ae7ef3d8613e7fc73201ce3c2edf5b49c4bf58c9c"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000040.png",
+      "size": 9234,
+      "oid": "6e1cb2ee6901f48c2580f5c33af36889d0d9e64ba9f2c27a8e4f4d0fe2e7d284"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000054.png",
+      "size": 9273,
+      "oid": "83c247fd13d07740228c0835e9178b27e6cf63c1d4cd5e63325ec3ef1acc27e8"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000050.png",
+      "size": 9244,
+      "oid": "4c29bf3d3e3ea398e4d64f3693453d60f7bf64c4ef15fbfa48cc22d601201767"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000044.png",
+      "size": 9227,
+      "oid": "10a38b7a82b4ea3a811df11e3d20327831320e6b2fded6b13fef97cacb364f56"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000045.png",
+      "size": 9200,
+      "oid": "c9231aef5a6d2e0e068e2302f737aa2e6bc8712375cfc2d688fc555244aa305f"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000051.png",
+      "size": 9242,
+      "oid": "4fa10ad6257fe31e1b9c81ea52063d5b5da325a44b24bfeda6953b2ddc14d1d9"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000047.png",
+      "size": 9181,
+      "oid": "d0c4198b4481b41883028e7666309848e75affebcedc06c8ec88801e06805b9a"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000053.png",
+      "size": 9227,
+      "oid": "f94aab160693cdd825fbd21861c259af97cbcce360492016d86c3e02708b539a"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000052.png",
+      "size": 9235,
+      "oid": "495ae065c8a8304f4df59a53e0d332f2c824f9341b1a8e32e0890119781e7088"
+    },
+    {
+      "path": "packages/producer/tests/distributed/png-sequence/output/frames/frame_000046.png",
+      "size": 9237,
+      "oid": "c01329f2ae1aa778b56161851dc31f6fa18104a5a736ef0d46b0b1c4b8e536c7"
+    },
+    {
+      "path": "packages/producer/tests/distributed/css-var-fonts/output/output.mp4",
+      "size": 71779,
+      "oid": "7e9a156b6ee3a7dd157ec0c44a337e7e9f5e4c7bbb80159e8f2b0b901554deeb"
+    },
+    {
+      "path": "packages/producer/tests/distributed/three-boundary-deferred/output/output.mp4",
+      "size": 22114,
+      "oid": "cc8c784064e83a62324b4968ef71d3f9c5e151ccf9f3e96a725660bb6c9bb3b9"
+    },
+    {
+      "path": "packages/producer/tests/distributed/plan-v2-partial-color/output/output.mp4",
+      "size": 4474,
+      "oid": "1f7c0a9d6609ead40648c7a3fba862c7fbedc97bcf42700363613e509debc504"
+    },
+    {
+      "path": "packages/producer/tests/distributed/plan-v2-partial-color/output/compiled.html",
+      "size": 1438,
+      "oid": "50bb159e7aad75a5672f4918411635b1fd5ef291e217f63734b4589ef949d263"
+    },
+    {
+      "path": "packages/producer/tests/distributed/plan-v2-partial-color/src/partial-color.mp4",
+      "size": 2251,
+      "oid": "ce6b3deecd76d6d80f7b2d3dc4c33f988acf7826b14f670edd62c9c312c89af6"
+    },
+    {
+      "path": "packages/producer/tests/distributed/static-volume-future-set/output/output.mp4",
+      "size": 65309,
+      "oid": "be14baf2cc15850ae357f217cb8f75ae5a2ce5a5a02509170fa27bbfc333de51"
+    },
+    {
+      "path": "packages/producer/tests/distributed/static-volume-future-set/output/compiled.html",
+      "size": 87166,
+      "oid": "44f07badd4fc8b99f7430ea23d7009263787656ac725d0a70a9c68f5c15c9ab1"
+    },
+    {
+      "path": "packages/producer/tests/hdr-hlg-regression/output/output.mp4",
+      "size": 6145183,
+      "oid": "55888e857a775146989737055aaea82cf2af0ab8122beaf3fa7ef9b1caec5734"
+    },
+    {
+      "path": "packages/producer/tests/hdr-hlg-regression/src/hdr-hlg-clip.mp4",
+      "size": 4533211,
+      "oid": "e6f0be49c970a41111a10f146e6b19177da7d42c7791aeb70fdabf3cbf8e06d2"
+    },
+    {
+      "path": "packages/producer/tests/portrait-edge-bleed/output/output.mp4",
+      "size": 9315,
+      "oid": "2120a0808f89d8fe95a7558f8b8741210eb3be593e77e453bda113f449647c2f"
+    },
+    {
+      "path": "packages/producer/tests/style-4-prod/output/output.mp4",
+      "size": 28635292,
+      "oid": "d60fe2e7480df2e2e989768d721d9727ba7f9f0c8997e6772559f0c8a99f5041"
+    },
+    {
+      "path": "packages/producer/tests/typegpu-adapter/output/output.mp4",
+      "size": 1772447,
+      "oid": "990cb6d9881dad6855ee768b9cd8f61df51e98225196ab5b628a4b5a5c281f3f"
+    },
+    {
+      "path": "packages/producer/tests/variables-prod/output/output.mp4",
+      "size": 116892,
+      "oid": "8661c4f42b2ec4315180d51a498b199f90e8234983e27b4c572f93e12ca44992"
+    },
+    {
+      "path": "packages/producer/tests/style-8-prod/output/output.mp4",
+      "size": 14505075,
+      "oid": "89676df3eabed0e31d9764457b08273a3fb96726ce3884e985b64030ea5be80c"
+    },
+    {
+      "path": "packages/producer/tests/mapbox-adapter/output/output.mp4",
+      "size": 213883,
+      "oid": "cf5c77b49eb2a7d0396b2798e872a4a6708dbe8c24be6c81afa896d86a1f7886"
+    },
+    {
+      "path": "packages/producer/tests/style-16-prod/output/output.mp4",
+      "size": 12317398,
+      "oid": "fe6cf86c3a374bdd47e083be44f4348fb047ebfa8b6094fd92a152c02c5a98bb"
+    },
+    {
+      "path": "packages/producer/tests/style-17-prod/output/output.mp4",
+      "size": 17110152,
+      "oid": "e43a77c57c8d14e0939688dfa1bb29becee026a6d9ed759e07c8b7ba26f5a1ef"
+    },
+    {
+      "path": "packages/producer/tests/vfr-screen-recording/output/output.mp4",
+      "size": 571145,
+      "oid": "0bc043a8148f8c1f76ddeba3b76e2ddafe718981cec572c59c57dc4c076dcb49"
+    },
+    {
+      "path": "packages/producer/tests/vfr-screen-recording/src/clip.mp4",
+      "size": 108396,
+      "oid": "602459ff96bcd7cd4bf306935b857676434bb65b2a1e395d30ce19a225bbd359"
+    },
+    {
+      "path": "packages/producer/tests/render-video-overlay-stretch/output/output.mp4",
+      "size": 20066,
+      "oid": "95f96e2676be7808074ca22dc06f68bb845c83ff3f2036afd75730c4c487cc3a"
+    },
+    {
+      "path": "packages/producer/tests/render-video-overlay-stretch/src/transition-overlay.png",
+      "size": 1207,
+      "oid": "79aa1c819cfedf44f09b80e6bb1f161eea3d8090dfc0eb3929a421c6b9e46664"
+    },
+    {
+      "path": "packages/producer/tests/render-video-overlay-stretch/src/clip.mp4",
+      "size": 5358,
+      "oid": "da59ab7e77075ae083b9c957bc6d7896a0e0d62eeef4f50be63e278a1feb7303"
+    },
+    {
+      "path": "packages/producer/tests/style-9-prod/output/output.mp4",
+      "size": 13520567,
+      "oid": "d8fb3bbb1666443c7f004a7b9c6dfba594097611fed18cf386e91fc45f5d378b"
+    },
+    {
+      "path": "packages/producer/tests/static-dedup-nested-visibility/output/output.mp4",
+      "size": 21880,
+      "oid": "a75f90109f9387a9850e5443db1c3562a4713fd57513a8dc86b97ad0b1fc83c5"
+    },
+    {
+      "path": "packages/producer/tests/static-dedup-nested-visibility/output/compiled.html",
+      "size": 89000,
+      "oid": "ca4fdf520c4961eeaee542b9ea0f7eed4b2e3f3b8ab54b0860ede1c8b15dad5c"
+    },
+    {
+      "path": "packages/producer/tests/animejs-adapter/output/output.mp4",
+      "size": 353004,
+      "oid": "0c2ee1b67cc6665a4b9a55da5e35a0b71c6b16acfe388c2104e01f5ffcf54807"
+    },
+    {
+      "path": "packages/producer/tests/style-5-prod/output/output.mp4",
+      "size": 11345947,
+      "oid": "4062ca66ba4688d9025c3ad28a2272d231234e004bc42d8be693288e8e80c801"
+    },
+    {
+      "path": "packages/producer/tests/style-18-prod/output/output.mp4",
+      "size": 17512767,
+      "oid": "f917e469fd0d80c2393e153239254ba2bc9faf68bffc57cde4cc8dbb4e4ab986"
+    },
+    {
+      "path": "packages/producer/tests/pip-video-late-host/output/output.mp4",
+      "size": 4543900,
+      "oid": "e55fa62662077cbc96341302bc91e4aeb6f65a50ca672718c9e68b8159bdb3e1"
+    },
+    {
+      "path": "packages/producer/tests/hdr-regression/output/output.mp4",
+      "size": 3689447,
+      "oid": "5808c1d2d8e794568deb36ff8c727066d3c6846bd764f4dc10b154c8c329e717"
+    },
+    {
+      "path": "packages/producer/tests/hdr-regression/src/hdr-photo-pq.png",
+      "size": 3026,
+      "oid": "ba30a9ccd79bd7f283c9d3d7ec273513e95dc45bf3b9660c0a4f8463d6b523fa"
+    },
+    {
+      "path": "packages/producer/tests/hdr-regression/src/hdr-clip.mp4",
+      "size": 1019741,
+      "oid": "70a055b4946a6cb486198438f2c18372e852e4cd16ebecea3356da84fd3daf5e"
+    },
+    {
+      "path": "packages/producer/tests/overlay-montage-prod/output/output.mp4",
+      "size": 27982739,
+      "oid": "337ad84a03f1db76ba686f0ac6ecaca6e8c4ca14d1c26469f0c168bbe4f409a1"
+    },
+    {
+      "path": "packages/producer/tests/style-6-prod/output/output.mp4",
+      "size": 11692359,
+      "oid": "90fab14cda8fc975b87807114d0371f8b463e08d5114d3322961eade3315d61e"
+    },
+    {
+      "path": "packages/producer/tests/chrome-screenshot-bottom-edge/output/output.mp4",
+      "size": 43189,
+      "oid": "ffec9cda98f24e06e74f65440ef13a3889ce110bc2b04394fd93f8afb61c8893"
+    },
+    {
+      "path": "packages/producer/tests/parallel-capture-regression/output/output.mp4",
+      "size": 1169572,
+      "oid": "29f4050ec978ff7c8c35776d047c1f5474f4ac0a59f37c389c4358e4fd8370f0"
+    },
+    {
+      "path": "packages/producer/tests/vignelli-stacking/output/output.mp4",
+      "size": 4786337,
+      "oid": "520015e780742d74ea28bc88251bbf3adc03bfe42e16a3b28ef6b22bffaea4c0"
+    },
+    {
+      "path": "packages/producer/tests/sub-comp-height-percent/output/output.mp4",
+      "size": 66475,
+      "oid": "dbb6ea0ce356215a63eab4bbe5fa9e50b6444a9e600dee16bdadaf6bb8fb20a6"
+    },
+    {
+      "path": "packages/producer/tests/style-15-prod/output/output.mp4",
+      "size": 22661197,
+      "oid": "41e09a7519f56d573096ba01d2e5c9cf59956f5b54e9da5bb0a1467a49f48039"
+    },
+    {
+      "path": "packages/producer/tests/style-7-prod/output/output.mp4",
+      "size": 12282546,
+      "oid": "74c710f61ae3400ecc5477e9ab42fa78c25340e6947b8dc5e0a916da166620e4"
+    },
+    {
+      "path": "packages/producer/tests/sub-comp-t0/output/output.mp4",
+      "size": 430821,
+      "oid": "33597d183557e6111b65875831fc41609f1fd6ac10978e8ac5ffbe4e36d6d4f3"
+    },
+    {
+      "path": "packages/producer/tests/webgl-video-texture-render-compat/output/output.mp4",
+      "size": 1075677,
+      "oid": "b42f669f775a304b8bd9b5bd09c508a61fa354c950e0fb3081fecc86ff749e06"
+    },
+    {
+      "path": "packages/producer/tests/webgl-video-texture-render-compat/src/clip.mp4",
+      "size": 133576,
+      "oid": "c8571357061d144053774be928e226faf65a35626587c27459a25421d0941ac8"
+    },
+    {
+      "path": "packages/producer/tests/hf2550-video-subcomposition-ghost/output/output.mp4",
+      "size": 65763536,
+      "oid": "e091aee82c20da5e340e9f2a9c85c29474c4ed6be8220df1494c7f128f1749ce"
+    },
+    {
+      "path": "packages/producer/tests/hf2550-video-subcomposition-ghost/output/compiled.html",
+      "size": 1129788,
+      "oid": "26bfa531f6a7b4a31ad6e99e838f743b552d3b3c7c461a7c3f7b9c85d02d27cf"
+    },
+    {
+      "path": "packages/producer/tests/hf2550-video-subcomposition-ghost/src/staged_bea3803b37370134.mp4",
+      "size": 28509566,
+      "oid": "11874bb366edf2414d39c0375d9607c5557108712f89cb7ab83a5ebfc9ffd999"
+    },
+    {
+      "path": "packages/producer/tests/hf2550-video-subcomposition-ghost/src/index.html",
+      "size": 761352,
+      "oid": "df2daf89b0fe9646669bebf269b5fc60ff0bc4923df07d0683c5f68ba730ebcf"
+    },
+    {
+      "path": "packages/producer/tests/maplibre-adapter/output/output.mp4",
+      "size": 98887,
+      "oid": "67f116ec5e15cb460d2926fd55ba1195cde6d05e519c6fe55fecc098ea966325"
+    },
+    {
+      "path": "packages/producer/tests/sub-comp-class-selector/output/output.mp4",
+      "size": 33420,
+      "oid": "22c76cc409f4567792d5f80b9c379c8905ab34cbb90bc11fe398ddf47a4fc4d7"
+    },
+    {
+      "path": "packages/producer/tests/nested-sequential-video-local-start/output/output.mp4",
+      "size": 3109,
+      "oid": "a20970478bdda73a8d1b2610d5046ea1ec05db25340251dd712230b3db57d975"
+    },
+    {
+      "path": "packages/producer/tests/nested-sequential-video-local-start/output/compiled.html",
+      "size": 2291,
+      "oid": "04e1e32b29828b8cbe7ba114ab66081eb5443359eed7e911cf0e2462044b7cd0"
+    },
+    {
+      "path": "packages/producer/tests/nested-sequential-video-local-start/src/media/source.mp4",
+      "size": 2750,
+      "oid": "5b3552325f6a25ea3859be60a6bef131878066aca48d8409e4182f539d144e5f"
+    },
+    {
+      "path": "packages/producer/tests/missing-host-comp-id/output/output.mp4",
+      "size": 130189,
+      "oid": "61cc9a67d53cfe17fd701f716347567be875f53a71fd3a6df9bef9c306937ace"
+    },
+    {
+      "path": "packages/producer/tests/video-hfid-no-id/output/output.mp4",
+      "size": 1678576,
+      "oid": "905d3ee8cedd0f9f414d6287b90f9626aa6db3bec64e78674e2d4b6364e8d69c"
+    },
+    {
+      "path": "packages/producer/tests/video-hfid-no-id/src/clip.mp4",
+      "size": 814218,
+      "oid": "67a517c70352bd3690de7a40f6e2f761c418e860ad121d1889a42fda0f9fd4a6"
+    },
+    {
+      "path": "packages/producer/tests/style-12-prod/output/output.mp4",
+      "size": 11712255,
+      "oid": "7978a2502f3c187419ef7fd404f5f48998cf6799f5b565a588ea189a4665812a"
+    },
+    {
+      "path": "packages/producer/tests/software-beginframe-yoyo-compositor/output/output.mp4",
+      "size": 1843718,
+      "oid": "326ced7888acace3f38c020eb7c56a6164940b94d335603153d615f4b66dc408"
+    },
+    {
+      "path": "packages/producer/tests/software-beginframe-yoyo-compositor/output/compiled.html",
+      "size": 437140,
+      "oid": "9763ae3659454f2baa08f403562e334f4b17b1610a54df20203d21b58543fc26"
+    },
+    {
+      "path": "packages/producer/tests/sub-comp-id-selector/output/output.mp4",
+      "size": 63359,
+      "oid": "827a763085f861fbc3d876d8f366cb34be19e610759a0dd8793edcf1c1716d55"
+    },
+    {
+      "path": "packages/producer/tests/gsap-letters-render-compat/output/output.mp4",
+      "size": 435889,
+      "oid": "a1fb024874f6d301775019feca5210e5e514b40153264488a5311f02f475b413"
+    },
+    {
+      "path": "packages/producer/tests/subcomp-bare-fragment/output/output.mp4",
+      "size": 8010,
+      "oid": "e7b4f73d97c019701a8a40cfd3f3b34c649ab6030a3aa42af31a9dd81e820bd6"
+    },
+    {
+      "path": "packages/producer/tests/subcomp-bare-fragment/output/compiled.html",
+      "size": 88423,
+      "oid": "bbe739daff8c969b5106ac0c95484556778604daf0d6f99ae1f99fd2fdf9d6ea"
+    },
+    {
+      "path": "packages/producer/tests/page-side-shader-compositor-render-compat/output/output.mp4",
+      "size": 1019952,
+      "oid": "597949c9308c0436609f731291b9050d3d25efcd730c1d5db8f1a1cff76a0184"
+    },
+    {
+      "path": "packages/producer/tests/wysiwyg-subcomp-css/output/output.mp4",
+      "size": 9290,
+      "oid": "b2ee4eefee44ae1ec3e957c3a4a03b72edcd4e44b375965edf3334e3212de644"
+    },
+    {
+      "path": "packages/producer/tests/heygen-promo-preview-assets/output/output.mp4",
+      "size": 12449983,
+      "oid": "3619744a80e64da3cf639b8332fe3c933bfe8bca7bf06760bd134f6d2eb2b5f2"
+    },
+    {
+      "path": "packages/producer/tests/heygen-promo-preview-assets/src/feature-strip.png",
+      "size": 613605,
+      "oid": "2987a0b4dd87c3f79a4469c83e578c66f902f87fa11951995d8ff3de064cf314"
+    },
+    {
+      "path": "packages/producer/tests/heygen-promo-preview-assets/src/heygen-homepage.png",
+      "size": 455746,
+      "oid": "cb765369fd4f8ac8ec224ca8a68205f7268a25168e1f36da979f9e1e5675f172"
+    },
+    {
+      "path": "packages/producer/tests/heygen-promo-preview-assets/src/heygen-logo.png",
+      "size": 27230,
+      "oid": "8513a4b03f63a5c05da672194856b38e31e2eafee3aedb3cbe04bd65acb643c0"
+    },
+    {
+      "path": "packages/producer/tests/heygen-promo-preview-assets/src/heygen-superpower.png",
+      "size": 270913,
+      "oid": "b5cef25211ff298d372ded6b0c3eb3e34bcb04d9bdee9bbeb8a0813c3af4bd85"
+    },
+    {
+      "path": "packages/producer/tests/heygen-promo-preview-assets/src/hero-prism.png",
+      "size": 280704,
+      "oid": "1b5e590661d45c67a8bb59aaa1557458cce5e565d2a245af273a44b4e969cad3"
+    },
+    {
+      "path": "packages/producer/tests/style-1-prod/output/output.mp4",
+      "size": 8408639,
+      "oid": "e8e2a35eaa5913ba1248ee5db59d9273ebdf880164adea90fec973be844639bb"
+    },
+    {
+      "path": "packages/producer/tests/leaflet-adapter/output/output.mp4",
+      "size": 86363,
+      "oid": "11742cc93d05dde833246b259fe25fe93cde7f3d15c9907fa6838a57852822df"
+    },
+    {
+      "path": "packages/producer/tests/css-import-scoping/output/output.mp4",
+      "size": 38945,
+      "oid": "4234211da34fdc26ccefc72ea2dd859b24b776fd980ae51a109783397dbc2097"
+    },
+    {
+      "path": "packages/producer/tests/render-symlinked-assets/output/output.mp4",
+      "size": 10480,
+      "oid": "a2244360ee769eb20661c7a36321783bc657a4c87de7bf11860dcd2095e3386e"
+    },
+    {
+      "path": "packages/producer/tests/webm-transparency/output/compiled.html",
+      "size": 2562420,
+      "oid": "0a58f6769219ee42b16805f01f00fb0958f4d1402e3c2fd82b19273eed14c4e5"
+    },
+    {
+      "path": "packages/producer/tests/webm-transparency/output/output.webm",
+      "size": 29607,
+      "oid": "8f6d5ff248eb9bad32621466549fa46109cef4baeb31677e473dab51b197dacc"
+    },
+    {
+      "path": "packages/producer/tests/audio-mux-parity/output/output.mp4",
+      "size": 321645,
+      "oid": "7c7b88b0f40c29dcfa13faff6dc16bea06170d8b6b8a686fa1c2b2e53d82498a"
+    },
+    {
+      "path": "packages/producer/tests/many-cuts/output/output.mp4",
+      "size": 691095,
+      "oid": "e242b3884ec5ee774078f2226b617ef4ca29da7844904006fca30514f6843854"
+    },
+    {
+      "path": "packages/producer/tests/style-13-prod/output/output.mp4",
+      "size": 15006441,
+      "oid": "af9dca1109886deef88b0400ed8d5cf0516e6e9b236fae166215ce7387d46877"
+    }
+  ]
+}

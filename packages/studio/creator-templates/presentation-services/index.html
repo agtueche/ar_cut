@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Présentation de services</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #191e26;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        color: #f4f7f6;
+      }
+      #brand {
+        position: absolute;
+        left: 160px;
+        top: 120px;
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        color: #00a896;
+      }
+      #intro {
+        position: absolute;
+        left: 160px;
+        top: 360px;
+        width: 1400px;
+        font-size: 96px;
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+      .card {
+        position: absolute;
+        top: 300px;
+        width: 480px;
+        height: 480px;
+        border-radius: 32px;
+        background: #242c37;
+        border: 1px solid rgba(167, 178, 194, 0.18);
+      }
+      .card-dot {
+        position: absolute;
+        top: 348px;
+        width: 72px;
+        height: 72px;
+        border-radius: 36px;
+      }
+      .card-title {
+        position: absolute;
+        top: 460px;
+        width: 384px;
+        font-size: 52px;
+        font-weight: 800;
+      }
+      .card-text {
+        position: absolute;
+        top: 548px;
+        width: 384px;
+        font-size: 32px;
+        line-height: 1.35;
+        color: #a7b2c2;
+      }
+      #card-1 {
+        left: 160px;
+      }
+      #card-1-dot {
+        left: 208px;
+        background: #00a896;
+      }
+      #card-1-title {
+        left: 208px;
+      }
+      #card-1-text {
+        left: 208px;
+      }
+      #card-2 {
+        left: 720px;
+      }
+      #card-2-dot {
+        left: 768px;
+        background: #ff6b35;
+      }
+      #card-2-title {
+        left: 768px;
+      }
+      #card-2-text {
+        left: 768px;
+      }
+      #card-3 {
+        left: 1280px;
+      }
+      #card-3-dot {
+        left: 1328px;
+        background: #a7b2c2;
+      }
+      #card-3-title {
+        left: 1328px;
+      }
+      #card-3-text {
+        left: 1328px;
+      }
+      #contact-title {
+        position: absolute;
+        left: 160px;
+        top: 340px;
+        font-size: 100px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      #contact-line {
+        position: absolute;
+        left: 160px;
+        top: 520px;
+        font-size: 44px;
+        color: #a7b2c2;
+      }
+      #contact-badge {
+        position: absolute;
+        left: 160px;
+        top: 640px;
+        width: 560px;
+        height: 100px;
+        border-radius: 50px;
+        background: #ff6b35;
+        color: #101318;
+        font-size: 38px;
+        font-weight: 800;
+        text-align: center;
+        line-height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="18"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="brand" class="clip" data-start="0" data-duration="18" data-track-index="0">ATELIER LUMEN</div>
+      <h1 id="intro" class="clip" data-start="0" data-duration="5" data-track-index="1">Nous aidons les marques à raconter leur histoire en vidéo.</h1>
+      <div id="card-1" class="card clip" data-start="5" data-duration="8" data-track-index="2"></div>
+      <div id="card-1-dot" class="card-dot clip" data-start="5" data-duration="8" data-track-index="3"></div>
+      <h3 id="card-1-title" class="card-title clip" data-start="5" data-duration="8" data-track-index="4">Stratégie</h3>
+      <p id="card-1-text" class="card-text clip" data-start="5" data-duration="8" data-track-index="5">Un message clair et un plan de diffusion adapté à vos réseaux.</p>
+      <div id="card-2" class="card clip" data-start="5" data-duration="8" data-track-index="6"></div>
+      <div id="card-2-dot" class="card-dot clip" data-start="5" data-duration="8" data-track-index="7"></div>
+      <h3 id="card-2-title" class="card-title clip" data-start="5" data-duration="8" data-track-index="8">Production</h3>
+      <p id="card-2-text" class="card-text clip" data-start="5" data-duration="8" data-track-index="9">Tournage, montage et motion design réalisés par une équipe dédiée.</p>
+      <div id="card-3" class="card clip" data-start="5" data-duration="8" data-track-index="10"></div>
+      <div id="card-3-dot" class="card-dot clip" data-start="5" data-duration="8" data-track-index="11"></div>
+      <h3 id="card-3-title" class="card-title clip" data-start="5" data-duration="8" data-track-index="12">Diffusion</h3>
+      <p id="card-3-text" class="card-text clip" data-start="5" data-duration="8" data-track-index="13">Des formats prêts pour YouTube, Instagram, TikTok et LinkedIn.</p>
+      <h2 id="contact-title" class="clip" data-start="13" data-duration="5" data-track-index="14">Parlons de votre projet.</h2>
+      <p id="contact-line" class="clip" data-start="13" data-duration="5" data-track-index="15">Premier échange offert, réponse sous 48 heures.</p>
+      <div id="contact-badge" class="clip" data-start="13" data-duration="5" data-track-index="16">bonjour@atelier-lumen.fr</div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.fromTo("#brand", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 0);
+      tl.fromTo("#intro", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 0.4);
+      tl.to("#intro", { opacity: 0, y: -30, duration: 0.5, ease: "power2.in" }, 4.4);
+
+      ["1", "2", "3"].forEach((n, i) => {
+        const parts = [`#card-${n}`, `#card-${n}-dot`, `#card-${n}-title`, `#card-${n}-text`];
+        tl.fromTo(parts, { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 5.2 + i * 0.3);
+      });
+      const middle = ["#card-2", "#card-2-dot", "#card-2-title", "#card-2-text"];
+      tl.to(middle, { y: -24, duration: 0.6, ease: "power2.out" }, 8);
+      tl.to(middle, { y: 0, duration: 0.6, ease: "power2.inOut" }, 9.5);
+
+      tl.fromTo("#contact-title", { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }, 13.2);
+      tl.fromTo("#contact-line", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 13.8);
+      tl.fromTo("#contact-badge", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.8)" }, 14.2);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

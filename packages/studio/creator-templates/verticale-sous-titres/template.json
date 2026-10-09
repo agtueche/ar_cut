@@ -1,0 +1,9 @@
+{
+  "title": "Vidéo verticale avec sous-titres",
+  "description": "Format 9:16 pour les réseaux, avec sous-titres mot à mot (style réseaux sociaux) modifiables dans l'éditeur de sous-titres.",
+  "category": "social",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 12
+}

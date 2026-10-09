@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Vidéo pédagogique</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #f4f7f6;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        color: #101318;
+      }
+      #chapter {
+        position: absolute;
+        left: 160px;
+        top: 260px;
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #007a6e;
+      }
+      #title {
+        position: absolute;
+        left: 160px;
+        top: 320px;
+        width: 1500px;
+        font-size: 110px;
+        font-weight: 800;
+        line-height: 1.04;
+        letter-spacing: -0.03em;
+      }
+      #title-rule {
+        position: absolute;
+        left: 160px;
+        top: 600px;
+        width: 360px;
+        height: 12px;
+        border-radius: 6px;
+        background: #ff6b35;
+      }
+      .step-number {
+        position: absolute;
+        left: 160px;
+        width: 120px;
+        height: 120px;
+        border-radius: 60px;
+        background: #007a6e;
+        color: #f4f7f6;
+        font-size: 56px;
+        font-weight: 800;
+        text-align: center;
+        line-height: 120px;
+      }
+      .step-text {
+        position: absolute;
+        left: 320px;
+        width: 1200px;
+        font-size: 48px;
+        font-weight: 600;
+        line-height: 1.25;
+      }
+      #step-1-number {
+        top: 200px;
+      }
+      #step-1-text {
+        top: 222px;
+      }
+      #step-2-number {
+        top: 420px;
+      }
+      #step-2-text {
+        top: 442px;
+      }
+      #step-3-number {
+        top: 640px;
+      }
+      #step-3-text {
+        top: 662px;
+      }
+      #chart-title {
+        position: absolute;
+        left: 160px;
+        top: 150px;
+        font-size: 64px;
+        font-weight: 800;
+      }
+      .bar {
+        position: absolute;
+        bottom: 200px;
+        width: 220px;
+        border-radius: 20px 20px 0 0;
+        transform-origin: 50% 100%;
+      }
+      #bar-1 {
+        left: 360px;
+        height: 260px;
+        background: #a7b2c2;
+      }
+      #bar-2 {
+        left: 760px;
+        height: 420px;
+        background: #00a896;
+      }
+      #bar-3 {
+        left: 1160px;
+        height: 600px;
+        background: #ff6b35;
+      }
+      #chart-caption {
+        position: absolute;
+        left: 160px;
+        top: 920px;
+        width: 1600px;
+        font-size: 36px;
+        color: #242c37;
+      }
+      #summary {
+        position: absolute;
+        left: 160px;
+        top: 400px;
+        width: 1600px;
+        font-size: 84px;
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="20"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="chapter" class="clip" data-start="0" data-duration="4" data-track-index="0">Leçon 1</div>
+      <h1 id="title" class="clip" data-start="0" data-duration="4" data-track-index="1">Comprendre une idée en trois étapes</h1>
+      <div id="title-rule" class="clip" data-start="0" data-duration="4" data-track-index="2"></div>
+      <div id="step-1-number" class="step-number clip" data-start="4" data-duration="6" data-track-index="3">1</div>
+      <p id="step-1-text" class="step-text clip" data-start="4" data-duration="6" data-track-index="4">Observez le problème et nommez-le simplement.</p>
+      <div id="step-2-number" class="step-number clip" data-start="4" data-duration="6" data-track-index="5">2</div>
+      <p id="step-2-text" class="step-text clip" data-start="4" data-duration="6" data-track-index="6">Découpez-le en petites questions faciles à vérifier.</p>
+      <div id="step-3-number" class="step-number clip" data-start="4" data-duration="6" data-track-index="7">3</div>
+      <p id="step-3-text" class="step-text clip" data-start="4" data-duration="6" data-track-index="8">Testez une réponse, puis ajustez avec ce que vous apprenez.</p>
+      <h2 id="chart-title" class="clip" data-start="10" data-duration="6" data-track-index="9">Ce qui progresse avec la pratique</h2>
+      <div id="bar-1" class="bar clip" data-start="10" data-duration="6" data-track-index="10"></div>
+      <div id="bar-2" class="bar clip" data-start="10" data-duration="6" data-track-index="11"></div>
+      <div id="bar-3" class="bar clip" data-start="10" data-duration="6" data-track-index="12"></div>
+      <p id="chart-caption" class="clip" data-start="10" data-duration="6" data-track-index="13">Semaine 1, semaine 2, semaine 3 : la régularité compte plus que l'intensité.</p>
+      <h2 id="summary" class="clip" data-start="16" data-duration="4" data-track-index="14">À retenir : observer, découper, tester.</h2>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.fromTo("#chapter", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.2);
+      tl.fromTo("#title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 0.4);
+      tl.fromTo("#title-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut", transformOrigin: "0% 50%" }, 1.1);
+
+      ["1", "2", "3"].forEach((n, i) => {
+        const at = 4.2 + i * 1.2;
+        tl.fromTo(`#step-${n}-number`, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, at);
+        tl.fromTo(`#step-${n}-text`, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, at + 0.15);
+      });
+
+      tl.fromTo("#chart-title", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 10.1);
+      tl.fromTo(["#bar-1", "#bar-2", "#bar-3"], { scaleY: 0 }, { scaleY: 1, duration: 1, ease: "power3.out", stagger: 0.25 }, 10.5);
+      tl.fromTo("#chart-caption", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 11.8);
+
+      tl.fromTo("#summary", { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.8, ease: "power3.out" }, 16.2);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
