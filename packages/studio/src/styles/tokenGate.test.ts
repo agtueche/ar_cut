@@ -103,7 +103,8 @@ describe("token gate", () => {
     expect(await unresolved(new Map([["a.tsx", "<div className={`w-${i}`} />"]]))).toEqual([]);
   });
 
+  // Compiling every class of the tree takes ~5 s on a loaded 8 GB machine: give it room.
   it("resolves every class Studio's own source claims", async () => {
     expect(await unresolved(studioSources())).toEqual([]);
-  });
+  }, 30_000);
 });

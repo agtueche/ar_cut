@@ -1,14 +1,15 @@
 import { openComposition } from "@hyperframes/sdk";
 import { buildElementHtml, nextTrackIndex, nextZIndex } from "./elementPresets";
 import { validateCues, type SubtitleCue } from "./subtitleFormat";
+import { COMPOSITION_PALETTE } from "../../creator-server/palette";
 export interface SubtitleStyle {
   color: string;
   background: string;
   size: number;
 }
 export const DEFAULT_SUBTITLE_STYLE: SubtitleStyle = {
-  color: "#ffffff",
-  background: "#101318",
+  color: COMPOSITION_PALETTE.subtitleText,
+  background: COMPOSITION_PALETTE.background,
   size: 48,
 };
 export function readSubtitleCues(html: string): SubtitleCue[] {

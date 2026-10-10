@@ -26,8 +26,10 @@ export function ownsPlainKeys(target: EventTarget | null): boolean {
   return isTypingTarget(target) || asElement(target)?.closest(KEY_OWNING_CONTROLS) != null;
 }
 
-// A slider steps and a native player seeks and plays with these keys themselves.
-const KEY_OWNING_CONTROLS = "[role='slider'],video[controls],audio[controls]";
+// A slider steps and a native player seeks and plays with these keys themselves;
+// so does a panel that declares it, like the source monitor (J K L, I O, arrows).
+const KEY_OWNING_CONTROLS =
+  "[role='slider'],video[controls],audio[controls],[data-owns-plain-keys]";
 
 /**
  * Things a keystroke belongs to rather than to a shortcut. `contenteditable` is

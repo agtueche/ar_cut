@@ -70,6 +70,8 @@ export function summarizeProject(workspace: CreatorWorkspace, id: string): Proje
     modifiedAt: modifiedAt(dir),
     lastOpenedAt: manifest.lastOpenedAt,
     renderCount: countRenders(dir),
+    owner: manifest.owner,
+    visibility: manifest.visibility,
   };
 }
 

@@ -1,5 +1,7 @@
 import { useId, useState, type ReactNode } from "react";
 import {
+  CaretDown,
+  CaretUp,
   FilmSlate,
   MusicNote,
   TextT,
@@ -16,7 +18,6 @@ import {
 } from "@phosphor-icons/react";
 import { useDockLayoutStore } from "../../components/dock/dockLayoutStore";
 import type { PanelId } from "../../components/dock/panelRegistry";
-import "../studioWorkspace.css";
 
 type Category =
   | "media"
@@ -62,18 +63,40 @@ const TOOLS: { id: PanelId; label: string; icon: Icon }[] = [
   { id: "credits", label: "Crédits et licences", icon: Info },
 ];
 
+function useCollapsedMenu(key: string) {
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem(key) === "true";
+    } catch {
+      return false;
+    }
+  });
+  const toggle = () => {
+    const next = !collapsed;
+    setCollapsed(next);
+    try {
+      localStorage.setItem(key, String(next));
+    } catch {
+      // Keep the control usable when browser storage is unavailable.
+    }
+  };
+  return { collapsed, toggle };
+}
+
 /** One library, persistent category contents; original dock panels remain available. */
 export function CreatorLibrary({ content }: { content: Record<Category, ReactNode> }) {
   const [active, setActive] = useState<Category>("media");
   const [visited, setVisited] = useState<Set<Category>>(() => new Set(["media"]));
   const prefix = useId();
+  const tools = useCollapsedMenu("ar-cut-tools-collapsed");
   const choose = (category: Category) => {
     setVisited((old) => new Set([...old, category]));
     setActive(category);
   };
   return (
-    <div className="creator-library">
+    <div className="creator-library" data-category={active}>
       <div
+        id={`${prefix}-categories`}
         className="creator-library-tabs"
         role="tablist"
         aria-label="Catégories de la bibliothèque"
@@ -104,7 +127,8 @@ export function CreatorLibrary({ content }: { content: Record<Category, ReactNod
             aria-selected={active === id}
             aria-controls={`${prefix}-${id}-panel`}
             tabIndex={active === id ? 0 : -1}
-            title={hint}
+            aria-label={label}
+            title={`${label} — ${hint}`}
             onClick={() => choose(id)}
           >
             <Icon size={20} />
@@ -126,10 +150,27 @@ export function CreatorLibrary({ content }: { content: Record<Category, ReactNod
           </div>
         ))}
       </div>
-      <nav className="creator-library-tools" aria-label="Outils du projet">
+      <button
+        className="creator-library-fold creator-library-tools-fold"
+        aria-expanded={!tools.collapsed}
+        aria-controls={`${prefix}-tools`}
+        onClick={tools.toggle}
+        title={tools.collapsed ? "Déplier les outils du projet" : "Replier les outils du projet"}
+      >
+        <span>
+          {tools.collapsed ? "Déplier les outils du projet" : "Replier les outils du projet"}
+        </span>
+        {tools.collapsed ? <CaretDown size={14} /> : <CaretUp size={14} />}
+      </button>
+      <nav
+        id={`${prefix}-tools`}
+        className={`creator-library-tools${tools.collapsed ? " is-collapsed" : ""}`}
+        aria-label="Outils du projet"
+      >
         {TOOLS.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
+            aria-label={label}
             title={label}
             onClick={() => useDockLayoutStore.getState().activatePanel(id)}
           >

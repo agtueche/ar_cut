@@ -6,6 +6,20 @@ import type { ProjectSummary, AssistantRequest } from "../../creator-server/proj
 import type { TrashEntry, ExportEntry } from "../../creator-server/projectOps";
 import type { PublicTemplate } from "../../creator-server/templates";
 import type { EnvironmentCheck } from "../../creator-server/environment";
+import type { MediaFolder, FolderItem, FolderColor } from "../../creator-server/folders";
+import type { MediaInfo } from "../../creator-server/sessionMediaInfo";
+import type { LibraryItem } from "../../creator-server/sessionLibrary";
+import type {
+  EnhanceOptions,
+  RecordingItem,
+  RecordingKind,
+} from "../../creator-server/sessionRecordings";
+import type {
+  StockCredit,
+  StockItem,
+  StockKind,
+  StockPage,
+} from "../../creator-server/sessionStock";
 
 export type {
   ProjectSummary,
@@ -14,6 +28,18 @@ export type {
   ExportEntry,
   PublicTemplate,
   EnvironmentCheck,
+  MediaFolder,
+  FolderItem,
+  FolderColor,
+  MediaInfo,
+  LibraryItem,
+  StockCredit,
+  StockItem,
+  StockKind,
+  StockPage,
+  EnhanceOptions,
+  RecordingItem,
+  RecordingKind,
 };
 
 export class CreatorApiError extends Error {
@@ -163,3 +189,120 @@ export const historyApi = {
   restore: (projectId: string, point: string) =>
     request<unknown>("POST", `/api/projects/${enc(projectId)}/history/restore`, { point }),
 };
+
+// "Mes dossiers": virtual media folders shared by every project (creator-server/folders.ts).
+
+export const folderApi = {
+  list: () => request<{ folders: MediaFolder[] }>("GET", `${base}/folders`),
+  create: (name: string, parentId: string | null) =>
+    request<{ folder: MediaFolder }>("POST", `${base}/folders`, { name, parentId }),
+  update: (id: string, patch: { name?: string; color?: FolderColor | null }) =>
+    request<{ folder: MediaFolder }>("PATCH", `${base}/folders/${enc(id)}`, patch),
+  remove: (id: string) => request<{ deleted: string[] }>("DELETE", `${base}/folders/${enc(id)}`),
+  addItem: (id: string, item: FolderItem) =>
+    request<{ folder: MediaFolder }>("POST", `${base}/folders/${enc(id)}/items`, item),
+  removeItem: (id: string, item: FolderItem) =>
+    request<{ folder: MediaFolder }>("POST", `${base}/folders/${enc(id)}/items/remove`, item),
+};
+
+/** Dates and durations of a project's media, for the media panel's sort menu. */
+export const mediaInfoApi = {
+  list: (projectId: string) =>
+    request<{ media: MediaInfo[] }>("GET", `${base}/projects/${enc(projectId)}/media-info`),
+};
+
+/** Right-click actions on one project media (creator-server/sessionAssetActions.ts). */
+export interface AssetDetails {
+  path: string;
+  size: number;
+  duration: number | null;
+  video: { codec: string; width: number; height: number; fps: number | null } | null;
+  audio: { codec: string; channels: number; sampleRate: number } | null;
+}
+
+export const assetActionsApi = {
+  reveal: (projectId: string, path: string) =>
+    request<{ ok: true }>("POST", `${base}/projects/${enc(projectId)}/media/reveal`, { path }),
+  details: (projectId: string, path: string) =>
+    request<{ details: AssetDetails }>("POST", `${base}/projects/${enc(projectId)}/media/details`, {
+      path,
+    }),
+  extractAudio: (projectId: string, path: string) =>
+    request<{ path: string }>("POST", `${base}/projects/${enc(projectId)}/media/extract-audio`, {
+      path,
+    }),
+};
+
+/** "Ma bibliothèque": reusable media shared by every project (creator-server/sessionLibrary.ts). */
+export const libraryApi = {
+  list: () => request<{ items: LibraryItem[] }>("GET", `${base}/library`),
+  add: (projectId: string, path: string) =>
+    request<{ path: string }>("POST", `${base}/library/items`, { projectId, path }),
+  remove: (path: string) => request<{ ok: true }>("POST", `${base}/library/remove`, { path }),
+};
+
+export function libraryFileUrl(path: string): string {
+  return `${base}/library/file/${path.split("/").map(enc).join("/")}`;
+}
+
+/** « Banque libre de droits » (creator-server/sessionStock.ts). */
+export const stockApi = {
+  search: (kind: StockKind, query: string, page: number) =>
+    request<StockPage>("POST", `${base}/stock/search`, { kind, query, page }),
+  toLibrary: (item: StockItem) =>
+    request<{ path: string }>("POST", `${base}/stock/library`, {
+      kind: item.kind,
+      provider: item.provider,
+      id: item.id,
+    }),
+  credit: (projectId: string, file: string, item: StockItem) =>
+    request<{ ok: true }>("POST", `${base}/stock/credit`, {
+      projectId,
+      file,
+      kind: item.kind,
+      provider: item.provider,
+      id: item.id,
+    }),
+  projectCredits: (projectId: string) =>
+    request<{ credits: StockCredit[] }>("GET", `${base}/projects/${enc(projectId)}/credits`),
+};
+
+export function stockFileUrl(item: StockItem): string {
+  return `${base}/stock/file/${item.kind}/${item.provider}/${enc(item.id)}`;
+}
+
+/** « Enregistrements » (creator-server/sessionRecordings.ts). */
+export const recordingApi = {
+  list: () => request<{ items: RecordingItem[] }>("GET", `${base}/recordings`),
+  enhance: (path: string, options: EnhanceOptions) =>
+    request<{ path: string }>("POST", `${base}/recordings/enhance`, { path, options }),
+  toLibrary: (path: string) =>
+    request<{ path: string }>("POST", `${base}/recordings/to-library`, { path }),
+  remove: (path: string) => request<{ ok: true }>("POST", `${base}/recordings/remove`, { path }),
+  /** Sends a take straight from MediaRecorder. */
+  upload: async (kind: RecordingKind, blob: Blob): Promise<{ path: string }> => {
+    let response: Response;
+    try {
+      response = await studioApiFetch(`${base}/recordings/upload?kind=${kind}`, {
+        method: "POST",
+        headers: { "Content-Type": blob.type || "audio/webm" },
+        body: blob,
+      });
+    } catch {
+      throw new CreatorApiError("network", 0);
+    }
+    const payload: unknown = await response.json().catch(() => null);
+    if (!response.ok) {
+      const message =
+        typeof payload === "object" && payload !== null && "error" in payload
+          ? String((payload as { error: unknown }).error)
+          : `HTTP ${response.status}`;
+      throw new CreatorApiError(message, response.status);
+    }
+    return payload as { path: string };
+  },
+};
+
+export function recordingFileUrl(path: string): string {
+  return `${base}/recordings/file/${enc(path)}`;
+}

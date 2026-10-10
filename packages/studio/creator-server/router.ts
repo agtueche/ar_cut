@@ -2,8 +2,17 @@
 // tested directly. The Vite plugin (vite.creator.ts) adapts Node requests to it.
 
 import { randomUUID } from "node:crypto";
+import { assetDetails, extractAssetAudio, revealAsset } from "./sessionAssetActions";
 import { type AssistantSelection, buildAssistantPrompt } from "./assistantPrompt";
 import { checkEnvironment } from "./environment";
+import {
+  addFolderItem,
+  createFolder,
+  deleteFolder,
+  readFolders,
+  removeFolderItem,
+  updateFolder,
+} from "./folders";
 import { readManifest, writeManifest } from "./projectMeta";
 import {
   CreatorError,
@@ -20,6 +29,22 @@ import {
   trashProject,
   validateCreateInput,
 } from "./projectOps";
+import { addToLibrary, listLibrary, removeFromLibrary } from "./sessionLibrary";
+import { readMediaInfo } from "./sessionMediaInfo";
+import {
+  enhanceRecording,
+  listRecordings,
+  recordingToLibrary,
+  removeRecording,
+} from "./sessionRecordings";
+import {
+  downloadToLibrary,
+  fetchStockItem,
+  isStockKind,
+  readCredits,
+  recordProjectCredit,
+  searchStock,
+} from "./sessionStock";
 import { listTemplates, publicTemplate } from "./templates";
 import { type CreatorWorkspace, projectDirFor } from "./workspace";
 
@@ -189,6 +214,153 @@ const ROUTES: Array<{ method: string; pattern: RegExp; handler: Handler }> = [
     method: "GET",
     pattern: /^\/exports$/,
     handler: async (ctx) => ok({ exports: listExports(ctx.workspace) }),
+  },
+  {
+    method: "GET",
+    pattern: /^\/projects\/([^/]+)\/media-info$/,
+    handler: async (ctx, [id]) => {
+      const dir = projectDirFor(ctx.workspace, id ?? "");
+      if (!dir || !summarizeProject(ctx.workspace, id ?? "")) {
+        throw new CreatorError("Projet introuvable.", 404);
+      }
+      return ok({ media: await readMediaInfo(dir) });
+    },
+  },
+  {
+    method: "POST",
+    pattern: /^\/projects\/([^/]+)\/media\/reveal$/,
+    handler: async (ctx, [id], body) => {
+      revealAsset(ctx.workspace, id ?? "", record(body).path);
+      return ok({ ok: true });
+    },
+  },
+  {
+    method: "POST",
+    pattern: /^\/projects\/([^/]+)\/media\/details$/,
+    handler: async (ctx, [id], body) =>
+      ok({ details: await assetDetails(ctx.workspace, id ?? "", record(body).path) }),
+  },
+  {
+    method: "POST",
+    pattern: /^\/projects\/([^/]+)\/media\/extract-audio$/,
+    handler: async (ctx, [id], body) =>
+      ok({ path: await extractAssetAudio(ctx.workspace, id ?? "", record(body).path) }, 201),
+  },
+  {
+    method: "GET",
+    pattern: /^\/library$/,
+    handler: async (ctx) => ok({ items: await listLibrary(ctx.workspace) }),
+  },
+  {
+    method: "POST",
+    pattern: /^\/library\/items$/,
+    handler: async (ctx, _p, body) => ok({ path: addToLibrary(ctx.workspace, body) }, 201),
+  },
+  {
+    method: "POST",
+    pattern: /^\/library\/remove$/,
+    handler: async (ctx, _p, body) => {
+      removeFromLibrary(ctx.workspace, body);
+      return ok({ ok: true });
+    },
+  },
+  {
+    method: "POST",
+    pattern: /^\/stock\/search$/,
+    handler: async (_ctx, _p, body) => {
+      const b = record(body);
+      if (!isStockKind(b.kind)) throw new CreatorError("Catégorie invalide.");
+      return ok(await searchStock(b.kind, b.query, b.page));
+    },
+  },
+  {
+    method: "POST",
+    pattern: /^\/stock\/library$/,
+    handler: async (ctx, _p, body) => {
+      const b = record(body);
+      if (!isStockKind(b.kind)) throw new CreatorError("Catégorie invalide.");
+      const item = await fetchStockItem(b.kind, b.provider, b.id);
+      return ok({ path: await downloadToLibrary(ctx.workspace, item) }, 201);
+    },
+  },
+  {
+    method: "POST",
+    pattern: /^\/stock\/credit$/,
+    handler: async (ctx, _p, body) => {
+      const b = record(body);
+      if (!isStockKind(b.kind)) throw new CreatorError("Catégorie invalide.");
+      const item = await fetchStockItem(b.kind, b.provider, b.id);
+      recordProjectCredit(ctx.workspace, b.projectId, b.file, item);
+      return ok({ ok: true });
+    },
+  },
+  {
+    method: "GET",
+    pattern: /^\/projects\/([^/]+)\/credits$/,
+    handler: async (ctx, [id]) => {
+      const dir = projectDirFor(ctx.workspace, id ?? "");
+      if (!dir) throw new CreatorError("Projet introuvable.", 404);
+      return ok({ credits: readCredits(dir) });
+    },
+  },
+  {
+    method: "GET",
+    pattern: /^\/recordings$/,
+    handler: async (ctx) => ok({ items: await listRecordings(ctx.workspace) }),
+  },
+  {
+    method: "POST",
+    pattern: /^\/recordings\/enhance$/,
+    handler: async (ctx, _p, body) => {
+      const b = record(body);
+      return ok({ path: await enhanceRecording(ctx.workspace, b.path, b.options) }, 201);
+    },
+  },
+  {
+    method: "POST",
+    pattern: /^\/recordings\/to-library$/,
+    handler: async (ctx, _p, body) =>
+      ok({ path: recordingToLibrary(ctx.workspace, record(body).path) }, 201),
+  },
+  {
+    method: "POST",
+    pattern: /^\/recordings\/remove$/,
+    handler: async (ctx, _p, body) => {
+      removeRecording(ctx.workspace, record(body).path);
+      return ok({ ok: true });
+    },
+  },
+  {
+    method: "GET",
+    pattern: /^\/folders$/,
+    handler: async (ctx) => ok({ folders: readFolders(ctx.workspace) }),
+  },
+  {
+    method: "POST",
+    pattern: /^\/folders$/,
+    handler: async (ctx, _p, body) => ok({ folder: createFolder(ctx.workspace, body) }, 201),
+  },
+  {
+    method: "PATCH",
+    pattern: /^\/folders\/([^/]+)$/,
+    handler: async (ctx, [id], body) => ok({ folder: updateFolder(ctx.workspace, id ?? "", body) }),
+  },
+  {
+    method: "DELETE",
+    pattern: /^\/folders\/([^/]+)$/,
+    handler: async (ctx, [id]) => ok({ deleted: deleteFolder(ctx.workspace, id ?? "") }),
+  },
+  {
+    method: "POST",
+    pattern: /^\/folders\/([^/]+)\/items$/,
+    handler: async (ctx, [id], body) =>
+      ok({ folder: addFolderItem(ctx.workspace, id ?? "", body) }),
+  },
+  {
+    method: "POST",
+    pattern: /^\/folders\/([^/]+)\/items\/remove$/,
+    handler: async (ctx, [id], body) =>
+      ok({ folder: removeFolderItem(ctx.workspace, id ?? "", body) }),
   },
   {
     method: "GET",

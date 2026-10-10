@@ -7,12 +7,11 @@ import { VideoFrameThumbnail } from "../ui/VideoFrameThumbnail";
 import { VIDEO_EXT, IMAGE_EXT } from "../../utils/mediaTypes";
 import { TIMELINE_ASSET_MIME } from "../../utils/timelineAssetDrop";
 import { ContextMenu } from "./AssetContextMenu";
-import { usePlayerStore } from "../../player/store/playerStore";
-import { timelineClipFocusId } from "../../player/components/timelineNavigationIdentity";
-import { useAssetPreviewStore } from "../../utils/assetPreviewStore";
-import { findClipForAsset, isPointerClick } from "../../utils/assetClickBehavior";
+import { isPointerClick } from "../../utils/assetClickBehavior";
 import { basename, ext, truncateMiddle, formatDuration, type CopyFeedback } from "./assetHelpers";
 import { resolveMediaPreviewUrl } from "../../player/components/thumbnailUtils";
+import { openAssetInSourceMonitor } from "./openInMonitor";
+import { AddToTimelineButton } from "./AddToTimelineButton";
 
 /** Drag payload writer shared by the asset tile and the font row: copy effect
  *  plus the timeline-asset MIME and a plain-text path fallback. */
@@ -152,45 +151,13 @@ export function AssetCard({
   // pointer-up events that followed a real drag gesture.
   const pointerDownRef = useRef<{ x: number; y: number } | null>(null);
 
-  const setSelectedElementId = usePlayerStore((s) => s.setSelectedElementId);
-  const requestTimelineFocus = usePlayerStore((s) => s.requestTimelineFocus);
-  const elements = usePlayerStore((s) => s.elements);
-  const setPreviewAsset = useAssetPreviewStore((s) => s.setPreviewAsset);
-  const clearPreviewAsset = useAssetPreviewStore((s) => s.clearPreviewAsset);
-
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     pointerDownRef.current = { x: e.clientX, y: e.clientY };
   }, []);
 
-  // Reveal the clip when the asset is already on the timeline, otherwise open
-  // the preview overlay. Shared by pointer-up and keyboard activation so the
-  // tile does the same thing however it is operated.
-  const activateCard = useCallback(() => {
-    if (used) {
-      const clip = findClipForAsset(elements, asset);
-      if (clip) {
-        // Dismiss any open preview overlay (from another asset) — the reveal
-        // must not leave a stale preview card floating over the canvas.
-        clearPreviewAsset();
-        const clipKey = clip.key ?? clip.id;
-        setSelectedElementId(clipKey);
-        // Scroll the timeline so the selected clip is actually visible.
-        requestTimelineFocus(timelineClipFocusId(clipKey));
-        return;
-      }
-    }
-    // Not added (or no matching clip found) → preview overlay
-    setPreviewAsset(asset, projectId);
-  }, [
-    used,
-    elements,
-    asset,
-    projectId,
-    setSelectedElementId,
-    requestTimelineFocus,
-    setPreviewAsset,
-    clearPreviewAsset,
-  ]);
+  // A click opens the media in the source monitor, to preview it and mark the
+  // section to send to the timeline (the « + » adds it whole).
+  const activateCard = useCallback(() => openAssetInSourceMonitor(asset), [asset]);
 
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
@@ -271,6 +238,11 @@ export function AssetCard({
             <span className="absolute top-1 right-1 text-[9px] font-medium leading-none px-1.5 py-[3px] rounded-sm bg-neutral-950/80 text-panel-text-2 tabular-nums">
               {durationLabel}
             </span>
+          )}
+
+          {/* « + » — bottom-right: puts the media on the timeline, as in CapCut */}
+          {onAddAssetToTimeline && (
+            <AddToTimelineButton asset={asset} name={name} onAdd={onAddAssetToTimeline} />
           )}
         </div>
 

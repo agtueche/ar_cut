@@ -3,11 +3,9 @@ import { classifyWebAudioMediaRoute } from "@hyperframes/core/runtime/web-audio-
 import { ContextMenu } from "./AssetContextMenu";
 import { basename, getAudioSubtype, type CopyFeedback } from "./assetHelpers";
 import { TIMELINE_ASSET_MIME } from "../../utils/timelineAssetDrop";
-import { usePlayerStore } from "../../player/store/playerStore";
-import { useAssetPreviewStore } from "../../utils/assetPreviewStore";
-import { findClipForAsset, isPointerClick } from "../../utils/assetClickBehavior";
+import { isPointerClick } from "../../utils/assetClickBehavior";
 import { resolveMediaPreviewUrl } from "../../player/components/thumbnailUtils";
-import { timelineClipFocusId } from "../../player/components/timelineNavigationIdentity";
+import { openAssetInSourceMonitor } from "./openInMonitor";
 
 // Only one preview should play at a time; starting a row stops the previous one.
 let stopCurrentPreview: (() => void) | null = null;
@@ -55,41 +53,10 @@ export function AudioRow({
 
   // CapCut-style click behavior: drag-threshold gate.
   const pointerDownRef = useRef<{ x: number; y: number } | null>(null);
-  const setSelectedElementId = usePlayerStore((s) => s.setSelectedElementId);
-  const requestTimelineFocus = usePlayerStore((s) => s.requestTimelineFocus);
-  const elements = usePlayerStore((s) => s.elements);
-  const setPreviewAsset = useAssetPreviewStore((s) => s.setPreviewAsset);
-  const clearPreviewAsset = useAssetPreviewStore((s) => s.clearPreviewAsset);
 
-  // Reveal the clip when the asset is already on the timeline, otherwise open
-  // the preview overlay. Shared by pointer-up and keyboard activation so the
-  // row does the same thing however it is operated.
-  const activateRow = useCallback(() => {
-    if (used) {
-      const clip = findClipForAsset(elements, asset);
-      if (clip) {
-        // Dismiss any open preview overlay (from another asset) — the reveal
-        // must not leave a stale preview card floating over the canvas.
-        clearPreviewAsset();
-        const clipKey = clip.key ?? clip.id;
-        setSelectedElementId(clipKey);
-        // Scroll the timeline so the selected clip is actually visible.
-        requestTimelineFocus(timelineClipFocusId(clipKey));
-        return;
-      }
-    }
-    // Not added → preview overlay (audio player)
-    setPreviewAsset(asset, projectId);
-  }, [
-    used,
-    elements,
-    asset,
-    projectId,
-    setSelectedElementId,
-    requestTimelineFocus,
-    setPreviewAsset,
-    clearPreviewAsset,
-  ]);
+  // A click opens the media in the source monitor, to preview it and mark the
+  // section to send to the timeline (the « + » adds it whole).
+  const activateRow = useCallback(() => openAssetInSourceMonitor(asset), [asset]);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     pointerDownRef.current = { x: e.clientX, y: e.clientY };
@@ -227,7 +194,7 @@ export function AudioRow({
           e.preventDefault();
           setContextMenu({ x: e.clientX, y: e.clientY });
         }}
-        className={`group w-full text-left px-4 py-1.5 flex items-center gap-2.5 transition-colors cursor-pointer outline-hidden focus-visible:bg-neutral-800/60 ${
+        className={`creator-media-audio-row group w-full text-left px-4 py-1.5 flex items-center gap-2.5 transition-colors cursor-pointer outline-hidden focus-visible:bg-neutral-800/60 ${
           playing
             ? "bg-panel-accent/6"
             : isCopied
@@ -260,7 +227,7 @@ export function AudioRow({
           )}
         </button>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
+          <div className="creator-media-audio-info flex items-center gap-1.5">
             <span
               className={`text-[12px] font-medium truncate ${used ? "text-panel-text-1" : "text-panel-text-3"}`}
             >

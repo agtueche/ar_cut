@@ -1,0 +1,491 @@
+<template id="captions-template">
+  <div data-composition-id="captions" data-width="1080" data-height="1920" data-duration="12">
+    <div id="captions-container"></div>
+    <style>
+      [data-composition-id="captions"] {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        background: transparent;
+        overflow: hidden;
+      }
+
+      #captions-container {
+        position: absolute;
+        inset: 0;
+      }
+
+      .caption-group {
+        position: absolute;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25em;
+        opacity: 0;
+      }
+
+      .word {
+        display: inline-block;
+      }
+
+      .caption-group.group-0 {
+        font-family: sans-serif;
+        font-size: 76px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #F4F7F6;
+      }
+
+      .caption-group.group-1 {
+        font-family: sans-serif;
+        font-size: 76px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #F4F7F6;
+      }
+
+      .caption-group.group-2 {
+        font-family: sans-serif;
+        font-size: 76px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #F4F7F6;
+      }
+
+      .caption-group.group-3 {
+        font-family: sans-serif;
+        font-size: 76px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #F4F7F6;
+      }
+
+      .caption-group.group-4 {
+        font-family: sans-serif;
+        font-size: 76px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #F4F7F6;
+      }
+
+    </style>
+    <script>
+      (function () {
+        const TRANSCRIPT = [
+        {
+          "id": "w0",
+          "text": "Trois",
+          "start": 0.6,
+          "end": 0.92
+        },
+        {
+          "id": "w1",
+          "text": "conseils",
+          "start": 0.96,
+          "end": 1.28
+        },
+        {
+          "id": "w2",
+          "text": "pour",
+          "start": 1.32,
+          "end": 1.64
+        },
+        {
+          "id": "w3",
+          "text": "des",
+          "start": 1.68,
+          "end": 2
+        },
+        {
+          "id": "w4",
+          "text": "vidéos",
+          "start": 2.04,
+          "end": 2.36
+        },
+        {
+          "id": "w5",
+          "text": "verticales",
+          "start": 2.85,
+          "end": 3.17
+        },
+        {
+          "id": "w6",
+          "text": "qui",
+          "start": 3.21,
+          "end": 3.53
+        },
+        {
+          "id": "w7",
+          "text": "retiennent",
+          "start": 3.57,
+          "end": 3.89
+        },
+        {
+          "id": "w8",
+          "text": "l'attention.",
+          "start": 3.93,
+          "end": 4.25
+        },
+        {
+          "id": "w9",
+          "text": "Un :",
+          "start": 4.74,
+          "end": 5.06
+        },
+        {
+          "id": "w10",
+          "text": "accrochez",
+          "start": 5.1,
+          "end": 5.42
+        },
+        {
+          "id": "w11",
+          "text": "dès",
+          "start": 5.46,
+          "end": 5.78
+        },
+        {
+          "id": "w12",
+          "text": "la",
+          "start": 5.82,
+          "end": 6.14
+        },
+        {
+          "id": "w13",
+          "text": "première",
+          "start": 6.18,
+          "end": 6.5
+        },
+        {
+          "id": "w14",
+          "text": "seconde.",
+          "start": 6.54,
+          "end": 6.86
+        },
+        {
+          "id": "w15",
+          "text": "Deux :",
+          "start": 7.35,
+          "end": 7.67
+        },
+        {
+          "id": "w16",
+          "text": "écrivez",
+          "start": 7.71,
+          "end": 8.03
+        },
+        {
+          "id": "w17",
+          "text": "des",
+          "start": 8.07,
+          "end": 8.39
+        },
+        {
+          "id": "w18",
+          "text": "sous-titres",
+          "start": 8.43,
+          "end": 8.75
+        },
+        {
+          "id": "w19",
+          "text": "lisibles.",
+          "start": 8.79,
+          "end": 9.11
+        },
+        {
+          "id": "w20",
+          "text": "Trois :",
+          "start": 9.6,
+          "end": 9.92
+        },
+        {
+          "id": "w21",
+          "text": "terminez",
+          "start": 9.96,
+          "end": 10.28
+        },
+        {
+          "id": "w22",
+          "text": "par",
+          "start": 10.32,
+          "end": 10.64
+        },
+        {
+          "id": "w23",
+          "text": "une",
+          "start": 10.68,
+          "end": 11
+        },
+        {
+          "id": "w24",
+          "text": "question.",
+          "start": 11.04,
+          "end": 11.36
+        }
+      ];
+
+        const container = document.getElementById('captions-container');
+        if (!container) return;
+
+        const tl = gsap.timeline({ paused: true });
+
+        // Group: group-0
+      const groupEl_group_0 = document.createElement('div');
+      groupEl_group_0.className = 'caption-group clip group-0';
+      groupEl_group_0.dataset.start = '0.6';
+      groupEl_group_0.dataset.end = '2.36';
+      container.appendChild(groupEl_group_0);
+        const w_segment_0 = document.createElement('span');
+        w_segment_0.className = 'word clip';
+        w_segment_0.id = "w0";
+        w_segment_0.textContent = "Trois";
+        w_segment_0.dataset.start = '0.6';
+        w_segment_0.dataset.end = '0.92';
+        groupEl_group_0.appendChild(w_segment_0);
+        const w_segment_1 = document.createElement('span');
+        w_segment_1.className = 'word clip';
+        w_segment_1.id = "w1";
+        w_segment_1.textContent = "conseils";
+        w_segment_1.dataset.start = '0.96';
+        w_segment_1.dataset.end = '1.28';
+        groupEl_group_0.appendChild(w_segment_1);
+        const w_segment_2 = document.createElement('span');
+        w_segment_2.className = 'word clip';
+        w_segment_2.id = "w2";
+        w_segment_2.textContent = "pour";
+        w_segment_2.dataset.start = '1.32';
+        w_segment_2.dataset.end = '1.64';
+        groupEl_group_0.appendChild(w_segment_2);
+        const w_segment_3 = document.createElement('span');
+        w_segment_3.className = 'word clip';
+        w_segment_3.id = "w3";
+        w_segment_3.textContent = "des";
+        w_segment_3.dataset.start = '1.68';
+        w_segment_3.dataset.end = '2';
+        groupEl_group_0.appendChild(w_segment_3);
+        const w_segment_4 = document.createElement('span');
+        w_segment_4.className = 'word clip';
+        w_segment_4.id = "w4";
+        w_segment_4.textContent = "vidéos";
+        w_segment_4.dataset.start = '2.04';
+        w_segment_4.dataset.end = '2.36';
+        groupEl_group_0.appendChild(w_segment_4);
+        groupEl_group_0.style.left = '50%';
+        groupEl_group_0.style.top = '80%';
+        groupEl_group_0.style.transform = 'translateX(-50%) translateY(-50%)';
+        groupEl_group_0.style.justifyContent = 'center';
+        groupEl_group_0.style.maxWidth = '90%';
+      // Entrance: fade in at group start
+      tl.to(groupEl_group_0, { opacity: 1, duration: 0.2, ease: 'power2.out' }, 0.6);
+      // Exit: fade out at group end
+      tl.to(groupEl_group_0, { opacity: 0, duration: 0.2, ease: 'power2.in' }, 2.36 - 0.2);
+
+        // Group: group-1
+      const groupEl_group_1 = document.createElement('div');
+      groupEl_group_1.className = 'caption-group clip group-1';
+      groupEl_group_1.dataset.start = '2.85';
+      groupEl_group_1.dataset.end = '5.06';
+      container.appendChild(groupEl_group_1);
+        const w_segment_5 = document.createElement('span');
+        w_segment_5.className = 'word clip';
+        w_segment_5.id = "w5";
+        w_segment_5.textContent = "verticales";
+        w_segment_5.dataset.start = '2.85';
+        w_segment_5.dataset.end = '3.17';
+        groupEl_group_1.appendChild(w_segment_5);
+        const w_segment_6 = document.createElement('span');
+        w_segment_6.className = 'word clip';
+        w_segment_6.id = "w6";
+        w_segment_6.textContent = "qui";
+        w_segment_6.dataset.start = '3.21';
+        w_segment_6.dataset.end = '3.53';
+        groupEl_group_1.appendChild(w_segment_6);
+        const w_segment_7 = document.createElement('span');
+        w_segment_7.className = 'word clip';
+        w_segment_7.id = "w7";
+        w_segment_7.textContent = "retiennent";
+        w_segment_7.dataset.start = '3.57';
+        w_segment_7.dataset.end = '3.89';
+        groupEl_group_1.appendChild(w_segment_7);
+        const w_segment_8 = document.createElement('span');
+        w_segment_8.className = 'word clip';
+        w_segment_8.id = "w8";
+        w_segment_8.textContent = "l'attention.";
+        w_segment_8.dataset.start = '3.93';
+        w_segment_8.dataset.end = '4.25';
+        groupEl_group_1.appendChild(w_segment_8);
+        const w_segment_9 = document.createElement('span');
+        w_segment_9.className = 'word clip';
+        w_segment_9.id = "w9";
+        w_segment_9.textContent = "Un :";
+        w_segment_9.dataset.start = '4.74';
+        w_segment_9.dataset.end = '5.06';
+        groupEl_group_1.appendChild(w_segment_9);
+        groupEl_group_1.style.left = '50%';
+        groupEl_group_1.style.top = '80%';
+        groupEl_group_1.style.transform = 'translateX(-50%) translateY(-50%)';
+        groupEl_group_1.style.justifyContent = 'center';
+        groupEl_group_1.style.maxWidth = '90%';
+      // Entrance: fade in at group start
+      tl.to(groupEl_group_1, { opacity: 1, duration: 0.2, ease: 'power2.out' }, 2.85);
+      // Exit: fade out at group end
+      tl.to(groupEl_group_1, { opacity: 0, duration: 0.2, ease: 'power2.in' }, 5.06 - 0.2);
+
+        // Group: group-2
+      const groupEl_group_2 = document.createElement('div');
+      groupEl_group_2.className = 'caption-group clip group-2';
+      groupEl_group_2.dataset.start = '5.1';
+      groupEl_group_2.dataset.end = '6.86';
+      container.appendChild(groupEl_group_2);
+        const w_segment_10 = document.createElement('span');
+        w_segment_10.className = 'word clip';
+        w_segment_10.id = "w10";
+        w_segment_10.textContent = "accrochez";
+        w_segment_10.dataset.start = '5.1';
+        w_segment_10.dataset.end = '5.42';
+        groupEl_group_2.appendChild(w_segment_10);
+        const w_segment_11 = document.createElement('span');
+        w_segment_11.className = 'word clip';
+        w_segment_11.id = "w11";
+        w_segment_11.textContent = "dès";
+        w_segment_11.dataset.start = '5.46';
+        w_segment_11.dataset.end = '5.78';
+        groupEl_group_2.appendChild(w_segment_11);
+        const w_segment_12 = document.createElement('span');
+        w_segment_12.className = 'word clip';
+        w_segment_12.id = "w12";
+        w_segment_12.textContent = "la";
+        w_segment_12.dataset.start = '5.82';
+        w_segment_12.dataset.end = '6.14';
+        groupEl_group_2.appendChild(w_segment_12);
+        const w_segment_13 = document.createElement('span');
+        w_segment_13.className = 'word clip';
+        w_segment_13.id = "w13";
+        w_segment_13.textContent = "première";
+        w_segment_13.dataset.start = '6.18';
+        w_segment_13.dataset.end = '6.5';
+        groupEl_group_2.appendChild(w_segment_13);
+        const w_segment_14 = document.createElement('span');
+        w_segment_14.className = 'word clip';
+        w_segment_14.id = "w14";
+        w_segment_14.textContent = "seconde.";
+        w_segment_14.dataset.start = '6.54';
+        w_segment_14.dataset.end = '6.86';
+        groupEl_group_2.appendChild(w_segment_14);
+        groupEl_group_2.style.left = '50%';
+        groupEl_group_2.style.top = '80%';
+        groupEl_group_2.style.transform = 'translateX(-50%) translateY(-50%)';
+        groupEl_group_2.style.justifyContent = 'center';
+        groupEl_group_2.style.maxWidth = '90%';
+      // Entrance: fade in at group start
+      tl.to(groupEl_group_2, { opacity: 1, duration: 0.2, ease: 'power2.out' }, 5.1);
+      // Exit: fade out at group end
+      tl.to(groupEl_group_2, { opacity: 0, duration: 0.2, ease: 'power2.in' }, 6.86 - 0.2);
+
+        // Group: group-3
+      const groupEl_group_3 = document.createElement('div');
+      groupEl_group_3.className = 'caption-group clip group-3';
+      groupEl_group_3.dataset.start = '7.35';
+      groupEl_group_3.dataset.end = '9.11';
+      container.appendChild(groupEl_group_3);
+        const w_segment_15 = document.createElement('span');
+        w_segment_15.className = 'word clip';
+        w_segment_15.id = "w15";
+        w_segment_15.textContent = "Deux :";
+        w_segment_15.dataset.start = '7.35';
+        w_segment_15.dataset.end = '7.67';
+        groupEl_group_3.appendChild(w_segment_15);
+        const w_segment_16 = document.createElement('span');
+        w_segment_16.className = 'word clip';
+        w_segment_16.id = "w16";
+        w_segment_16.textContent = "écrivez";
+        w_segment_16.dataset.start = '7.71';
+        w_segment_16.dataset.end = '8.03';
+        groupEl_group_3.appendChild(w_segment_16);
+        const w_segment_17 = document.createElement('span');
+        w_segment_17.className = 'word clip';
+        w_segment_17.id = "w17";
+        w_segment_17.textContent = "des";
+        w_segment_17.dataset.start = '8.07';
+        w_segment_17.dataset.end = '8.39';
+        groupEl_group_3.appendChild(w_segment_17);
+        const w_segment_18 = document.createElement('span');
+        w_segment_18.className = 'word clip';
+        w_segment_18.id = "w18";
+        w_segment_18.textContent = "sous-titres";
+        w_segment_18.dataset.start = '8.43';
+        w_segment_18.dataset.end = '8.75';
+        groupEl_group_3.appendChild(w_segment_18);
+        const w_segment_19 = document.createElement('span');
+        w_segment_19.className = 'word clip';
+        w_segment_19.id = "w19";
+        w_segment_19.textContent = "lisibles.";
+        w_segment_19.dataset.start = '8.79';
+        w_segment_19.dataset.end = '9.11';
+        groupEl_group_3.appendChild(w_segment_19);
+        groupEl_group_3.style.left = '50%';
+        groupEl_group_3.style.top = '80%';
+        groupEl_group_3.style.transform = 'translateX(-50%) translateY(-50%)';
+        groupEl_group_3.style.justifyContent = 'center';
+        groupEl_group_3.style.maxWidth = '90%';
+      // Entrance: fade in at group start
+      tl.to(groupEl_group_3, { opacity: 1, duration: 0.2, ease: 'power2.out' }, 7.35);
+      // Exit: fade out at group end
+      tl.to(groupEl_group_3, { opacity: 0, duration: 0.2, ease: 'power2.in' }, 9.11 - 0.2);
+
+        // Group: group-4
+      const groupEl_group_4 = document.createElement('div');
+      groupEl_group_4.className = 'caption-group clip group-4';
+      groupEl_group_4.dataset.start = '9.6';
+      groupEl_group_4.dataset.end = '11.36';
+      container.appendChild(groupEl_group_4);
+        const w_segment_20 = document.createElement('span');
+        w_segment_20.className = 'word clip';
+        w_segment_20.id = "w20";
+        w_segment_20.textContent = "Trois :";
+        w_segment_20.dataset.start = '9.6';
+        w_segment_20.dataset.end = '9.92';
+        groupEl_group_4.appendChild(w_segment_20);
+        const w_segment_21 = document.createElement('span');
+        w_segment_21.className = 'word clip';
+        w_segment_21.id = "w21";
+        w_segment_21.textContent = "terminez";
+        w_segment_21.dataset.start = '9.96';
+        w_segment_21.dataset.end = '10.28';
+        groupEl_group_4.appendChild(w_segment_21);
+        const w_segment_22 = document.createElement('span');
+        w_segment_22.className = 'word clip';
+        w_segment_22.id = "w22";
+        w_segment_22.textContent = "par";
+        w_segment_22.dataset.start = '10.32';
+        w_segment_22.dataset.end = '10.64';
+        groupEl_group_4.appendChild(w_segment_22);
+        const w_segment_23 = document.createElement('span');
+        w_segment_23.className = 'word clip';
+        w_segment_23.id = "w23";
+        w_segment_23.textContent = "une";
+        w_segment_23.dataset.start = '10.68';
+        w_segment_23.dataset.end = '11';
+        groupEl_group_4.appendChild(w_segment_23);
+        const w_segment_24 = document.createElement('span');
+        w_segment_24.className = 'word clip';
+        w_segment_24.id = "w24";
+        w_segment_24.textContent = "question.";
+        w_segment_24.dataset.start = '11.04';
+        w_segment_24.dataset.end = '11.36';
+        groupEl_group_4.appendChild(w_segment_24);
+        groupEl_group_4.style.left = '50%';
+        groupEl_group_4.style.top = '80%';
+        groupEl_group_4.style.transform = 'translateX(-50%) translateY(-50%)';
+        groupEl_group_4.style.justifyContent = 'center';
+        groupEl_group_4.style.maxWidth = '90%';
+      // Entrance: fade in at group start
+      tl.to(groupEl_group_4, { opacity: 1, duration: 0.2, ease: 'power2.out' }, 9.6);
+      // Exit: fade out at group end
+      tl.to(groupEl_group_4, { opacity: 0, duration: 0.2, ease: 'power2.in' }, 11.36 - 0.2);
+
+        if (!window.__timelines) window.__timelines = {};
+        window.__timelines["captions"] = tl;
+      })();
+    </script>
+  </div>
+</template>

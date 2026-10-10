@@ -1,3 +1,5 @@
+import { StockCredits } from "./StockCredits";
+
 export function CreditsPanel() {
   return (
     <section
@@ -9,6 +11,7 @@ export function CreditsPanel() {
         Les nouveaux fonds, formes et préréglages Creator sont générés par le code du projet. Aucun
         abonnement, crédit ou filigrane n’est ajouté par ces fonctions.
       </p>
+      <StockCredits />
       <article>
         <h3 className="font-semibold">memfs — Streamich et contributeurs</h3>
         <p>Système de fichiers en mémoire pour la sauvegarde manuelle. Licence Apache-2.0.</p>

@@ -23,8 +23,10 @@
   background: var(--color-surface);
 }
 .creator-library-tabs {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
   flex-shrink: 0;
   border-bottom: 1px solid var(--color-border);
   background: var(--panel-strip-bg);
@@ -32,6 +34,7 @@
   gap: 3px;
 }
 .creator-library-tabs button {
+  flex: 0 0 66px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,4 +113,245 @@
   color: var(--color-accent);
   border-bottom-color: var(--color-accent);
   background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+.creator-library-fold {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 10px;
+  min-height: 28px;
+  font-size: 10px;
+  color: var(--color-text-muted);
+  background: var(--panel-strip-bg);
+}
+.creator-library-fold:hover {
+  color: var(--color-text-1);
+  background: var(--color-hover);
+}
+.creator-library-tools-fold {
+  border-top: 1px solid var(--color-border);
+}
+.creator-library-tools.is-collapsed button span {
+  display: none;
+}
+.creator-library-tools {
+  flex-shrink: 0;
+}
+.creator-library-tools.is-collapsed {
+  padding: 4px 7px;
+}
+.creator-library-tools.is-collapsed button {
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+/* Multimedia: existing navigation on the left, toolbar and assets on the right. */
+.creator-library-page > .creator-media {
+  container: media-panel / inline-size;
+  display: grid;
+  grid-template-columns: clamp(96px, 31%, 160px) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  overflow: hidden;
+}
+.creator-library-page .creator-media-header {
+  display: contents;
+}
+/* One left rail spanning the panel height: sources, then the type and usage
+   filters. It scrolls as a whole, so neither part squeezes the other. */
+.creator-library-page .creator-media-rail {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  border-right: 1px solid var(--color-border);
+  background: var(--panel-strip-bg);
+}
+.creator-library-page .creator-media-scope {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 8px 5px;
+  border-bottom: 1px solid var(--color-border);
+}
+.creator-library-page .creator-media-scope button {
+  flex: none;
+  text-align: left;
+  padding: 6px;
+  overflow-wrap: anywhere;
+}
+.creator-library-page .creator-media-scope button:disabled {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+/* Import, search and the three view menus share ONE line at every width:
+   the search shrinks first, then the import label and the menu carets hide. */
+.creator-library-page .creator-media-toolbar {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+  padding: 8px 6px;
+  overflow: hidden;
+  container-type: inline-size;
+  border-bottom: 1px solid var(--color-border);
+}
+.creator-library-page .creator-media-toolbar > button {
+  width: auto;
+  flex: none;
+  margin-block: 0;
+  min-height: 30px;
+  white-space: nowrap;
+}
+.creator-library-page .creator-media-toolbar > div {
+  flex: 1 1 0;
+  min-width: 28px;
+  margin-block: 0;
+}
+.creator-library-page .creator-media-toolbar > .creator-media-view-menus {
+  flex: none;
+  min-width: 0;
+}
+/* Spacing as margins (not gap) so the narrowest container query can tighten it. */
+.creator-library-page .creator-media-toolbar > * + * {
+  margin-left: 6px;
+}
+@container (max-width: 240px) {
+  .creator-library-page .creator-media-import-label {
+    display: none;
+  }
+  .creator-library-page .creator-media-toolbar > button {
+    padding-inline: 8px;
+  }
+}
+@container (max-width: 230px) {
+  .creator-library-page .creator-media-caret {
+    display: none;
+  }
+}
+@container (max-width: 190px) {
+  .creator-library-page .creator-media-toolbar > * + * {
+    margin-left: 3px;
+  }
+  .creator-library-page .creator-media-view-menus button {
+    padding-inline: 3px;
+  }
+}
+@container (max-width: 150px) {
+  .creator-library-page .creator-media-toolbar > * + * {
+    margin-left: 2px;
+  }
+  .creator-library-page .creator-media-toolbar > button {
+    padding-inline: 4px;
+  }
+  .creator-library-page .creator-media-toolbar > div {
+    min-width: 24px;
+  }
+  .creator-library-page .creator-media-view-menus button {
+    padding-inline: 1px;
+  }
+}
+/* A very narrow panel: the toolbar takes the full width above the rail, so it
+   keeps one line instead of fighting the rail for ~100px. */
+@container media-panel (max-width: 340px) {
+  .creator-library-page .creator-media-toolbar {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+  .creator-library-page .creator-media-rail {
+    grid-row: 2;
+  }
+}
+.creator-library-page .creator-media-results {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 6px 0;
+}
+.creator-library-page .creator-media-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(120px, 100%), 1fr));
+  gap: 8px;
+  padding: 6px 8px;
+}
+/* Display menu: small thumbnails pack more per row; list shows one row per file. */
+.creator-library-page .creator-media-grid[data-layout="small"] {
+  grid-template-columns: repeat(auto-fill, minmax(min(76px, 100%), 1fr));
+  gap: 4px;
+}
+.creator-library-page .creator-media-grid[data-layout="small"] > div > div:last-child span {
+  font-size: 9px;
+}
+.creator-library-page .creator-media-grid[data-layout="list"] {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
+.creator-library-page .creator-media-grid[data-layout="list"] > div {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.creator-library-page .creator-media-grid[data-layout="list"] > div > div:first-child {
+  width: 72px;
+  flex: none;
+}
+.creator-library-page .creator-media-grid[data-layout="list"] > div > div:last-child {
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: flex-start;
+}
+.creator-library-page .creator-media-grid[data-layout="list"] > div > div:last-child span {
+  text-align: left;
+  font-size: 11px;
+}
+
+
+.creator-library-page .creator-media-audio-row {
+  padding: 7px 8px;
+  gap: 5px;
+}
+.creator-library-page .creator-media-audio-info {
+  flex-wrap: wrap;
+  column-gap: 5px;
+  row-gap: 2px;
+}
+.creator-library-page .creator-media-audio-info > span:first-child {
+  flex-basis: 100%;
+}
+
+/* Banque libre de droits: the four sub-tabs keep their icons and drop their
+   labels when the results column gets narrow. */
+.creator-library-page .creator-media-results {
+  container: media-results / inline-size;
+}
+.creator-stock-tabs {
+  min-width: 0;
+}
+/* Narrow: the active sub-tab keeps its name and takes the room, the others shrink to icons. */
+@container media-results (max-width: 340px) {
+  .creator-stock-tabs {
+    display: flex;
+  }
+  .creator-stock-tabs > button {
+    flex: none;
+    padding-inline: 7px;
+  }
+  .creator-stock-tabs > button[aria-selected="true"] {
+    flex: 1 1 auto;
+  }
+  .creator-stock-tabs > button[aria-selected="false"] .creator-stock-tab-label {
+    display: none;
+  }
 }

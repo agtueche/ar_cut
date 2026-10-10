@@ -16,6 +16,17 @@ import {
 } from "./assetHelpers";
 import { AudioRow } from "./AudioRow";
 import { GlobalAssetsView } from "./GlobalAssetsView";
+import { MediaSourceList, type MediaSourceView } from "./MediaSourceList";
+import { MediaFolderList } from "./MediaFolderList";
+import { LibraryView, libraryTypeCounts, useLibraryItems } from "./LibraryView";
+import { StockView } from "./StockView";
+import { RecordingsView } from "./RecordingsView";
+import { libraryApi } from "../../creator/creatorApi";
+import { useStudioBridge } from "../../creator/studioBridge";
+import { ActiveMediaFilters, MediaViewMenus } from "./MediaViewMenus";
+import { sortAssets, useMediaInfo, useMediaViewSettings } from "./mediaBrowse";
+import { FolderEmptyState, FolderOtherProjects } from "./FolderOtherProjects";
+import { MediaFolderActionsContext, useAssetsTabFolders } from "./mediaFolders";
 import { AssetCard, FontRow } from "./AssetCard";
 import { studioApiFetch } from "../../utils/studioApiFetch";
 
@@ -110,6 +121,8 @@ function ImportButton({ importing, onClick }: { importing: boolean; onClick: () 
       onClick={onClick}
       disabled={importing}
       aria-busy={importing}
+      aria-label={label("Import media", "Importer des médias")}
+      title={label("Import media", "Importer des médias")}
       className="w-full flex items-center justify-center gap-1.5 rounded-md bg-panel-input px-3 py-[7px] text-[11px] font-medium text-panel-text-3 enabled:hover:text-panel-text-1 enabled:active:scale-[0.98] disabled:opacity-60 transition-colors mb-2.5"
     >
       {importing ? (
@@ -141,9 +154,9 @@ function ImportButton({ importing, onClick }: { importing: boolean; onClick: () 
           <path d="M12 5v14M5 12h14" />
         </svg>
       )}
-      {importing
-        ? label("Importing…", "Importation…")
-        : label("Import media", "Importer des médias")}
+      <span className="creator-media-import-label">
+        {importing ? label("Importing…", "Importation…") : label("Import", "Importer")}
+      </span>
     </button>
   );
 }
@@ -214,15 +227,23 @@ export const AssetsTab = memo(function AssetsTab({
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback>(null);
   const [importing, setImporting] = useState(false);
   const [activeFilter, setActiveFilter] = useState<MediaCategory | "all">("all");
+  const [view, setView] = useMediaViewSettings();
+  const library = useLibraryItems();
+  const bridge = useStudioBridge();
   const [usageFilter, setUsageFilter] = useState<"all" | "used" | "unused">("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"local" | "global">("local");
+  const [viewMode, setViewMode] = useState<MediaSourceView>("local");
+  // "Mes dossiers": a selected folder narrows the local view to its media.
+  const { folderState, setFolderId, currentFolder, folderPaths, folderActions } =
+    useAssetsTabFolders(projectId);
+
   const [manifest, setManifest] = useState<
     Map<string, { description?: string; duration?: number; width?: number; height?: number }>
   >(new Map());
 
   const manifest404Ref = useRef<Set<string>>(new Set());
   const assetsKey = assets.join("|");
+  const mediaInfo = useMediaInfo(projectId, assetsKey);
   useEffect(() => {
     if (manifest404Ref.current.has(projectId)) return;
     let cancelled = false;
@@ -290,8 +311,11 @@ export const AssetsTab = memo(function AssetsTab({
   // Unfiltered pool — header controls (search, chips) are gated on THIS, not
   // the search-filtered list, so a no-match query can't unmount its own input.
   const allMediaAssets = useMemo(
-    () => assets.filter((a) => MEDIA_EXT.test(a) || FONT_EXT.test(a)),
-    [assets],
+    () =>
+      assets.filter(
+        (a) => (MEDIA_EXT.test(a) || FONT_EXT.test(a)) && (!folderPaths || folderPaths.has(a)),
+      ),
+    [assets, folderPaths],
   );
 
   const mediaAssets = useMemo(() => {
@@ -311,193 +335,198 @@ export const AssetsTab = memo(function AssetsTab({
       const cat = getCategory(a);
       if (cat) groups[cat].push(a);
     }
-    // Sort: used assets first within each category
+    // Sort within each category by the toolbar's sort menu.
     for (const cat of FILTER_ORDER) {
-      groups[cat].sort((a, b) => {
-        const aUsed = usedPaths.has(a) ? 0 : 1;
-        const bUsed = usedPaths.has(b) ? 0 : 1;
-        return aUsed - bUsed;
-      });
+      groups[cat] = sortAssets(groups[cat], mediaInfo, view.sortKey, view.sortOrder);
     }
     return groups;
-  }, [mediaAssets, usedPaths]);
+  }, [mediaAssets, mediaInfo, view.sortKey, view.sortOrder]);
   const counts = useMemo(() => {
     const c: Record<string, number> = { all: mediaAssets.length };
     for (const cat of FILTER_ORDER) c[cat] = categorized[cat].length;
     return c;
   }, [mediaAssets, categorized]);
   const usageCounts = useMemo(
-    () =>
-      countUsage(
-        assets.filter((a) => MEDIA_EXT.test(a) || FONT_EXT.test(a)),
-        usedPaths,
-      ),
-    [assets, usedPaths],
+    () => countUsage(allMediaAssets, usedPaths),
+    [allMediaAssets, usedPaths],
   );
   const visibleCategories =
     activeFilter === "all"
       ? FILTER_ORDER.filter((c) => categorized[c].length > 0)
       : [activeFilter as MediaCategory].filter((c) => categorized[c].length > 0);
   return (
-    <div
-      className={`flex-1 flex flex-col min-h-0 transition-colors ${dragOver ? "bg-studio-accent/5" : ""}`}
-      onDragOver={(e) => {
-        e.preventDefault();
-        setDragOver(true);
+    <MediaFolderActionsContext.Provider
+      value={{
+        ...folderActions,
+        addToLibrary: async (path) => {
+          try {
+            await libraryApi.add(projectId, path);
+            bridge?.showToast(label("Added to my library", "Ajouté à ma bibliothèque"), "info");
+            library.refresh();
+          } catch (error) {
+            const why =
+              error instanceof Error && !/^HTTP|network/.test(error.message) ? error.message : "";
+            bridge?.showToast(
+              `${label("Could not add to my library", "Ajout à ma bibliothèque impossible")}${why ? ` : ${why}` : ""}${
+                /introuvable/.test(why)
+                  ? label(" Save the project first.", " Enregistrez d'abord le projet.")
+                  : ""
+              }`,
+              "error",
+            );
+          }
+        },
       }}
-      onDragLeave={() => setDragOver(false)}
-      onDrop={handleDrop}
     >
-      {/* Header — matches design panel Section pattern */}
-      <div className="px-4 pt-2.5 pb-1.5 shrink-0">
-        {/* Scope toggle */}
-        <div className="flex gap-1 mb-2.5 p-0.5 rounded-md bg-panel-input">
-          {(["local", "global"] as const).map((m) => (
-            <button
-              key={m}
-              onClick={() => setViewMode(m)}
-              className={`flex-1 px-2 py-1 text-[11px] font-medium rounded transition-colors ${
-                viewMode === m
-                  ? "bg-panel-accent/15 text-accent-ink"
-                  : "text-panel-text-3 hover:text-panel-text-1"
-              }`}
-            >
-              {m === "local"
-                ? label("This project", "Ce projet")
-                : label("All projects", "Tous les projets")}
-            </button>
-          ))}
-        </div>
-        {/* Import */}
-        {onImport && (
-          <>
-            <ImportButton importing={importing} onClick={() => fileInputRef.current?.click()} />
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="video/*,image/*,audio/*,font/*"
-              multiple
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files?.length) {
-                  void handleImport(e.target.files);
-                  e.target.value = "";
-                }
-              }}
-            />
-          </>
-        )}
-
-        {/* Search — gated on the UNFILTERED pool so it never unmounts itself */}
-        {allMediaAssets.length > 0 && (
-          <SearchInput
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={label("Search assets...", "Rechercher des médias…")}
-            aria-label={label("Search assets", "Rechercher des médias")}
-            className="mb-2"
-          />
-        )}
-
-        {/* Filter chips */}
-        {viewMode === "local" && allMediaAssets.length > 0 && (
-          <div className="flex gap-1.5 flex-wrap">
-            <button
-              onClick={() => setActiveFilter("all")}
-              aria-pressed={activeFilter === "all"}
-              className={`px-2.5 py-1 text-[11px] font-medium rounded-md transition-colors active:scale-[0.98] ${
-                activeFilter === "all"
-                  ? "bg-panel-accent/15 text-accent-ink"
-                  : "bg-panel-input text-panel-text-3 hover:text-panel-text-1"
-              }`}
-            >
-              {label("All", "Tous")} {counts.all}
-            </button>
-            {FILTER_ORDER.map((cat) =>
-              counts[cat] > 0 ? (
-                <button
-                  key={cat}
-                  onClick={() => setActiveFilter(activeFilter === cat ? "all" : cat)}
-                  aria-pressed={activeFilter === cat}
-                  className={`px-2.5 py-1 text-[11px] font-medium rounded-md transition-colors active:scale-[0.98] ${
-                    activeFilter === cat
-                      ? "bg-panel-accent/15 text-accent-ink"
-                      : "bg-panel-input text-panel-text-3 hover:text-panel-text-1"
-                  }`}
-                >
-                  {CATEGORY_LABELS[cat]} {counts[cat]}
-                </button>
-              ) : null,
-            )}
-            {usageCounts.used > 0 && usageCounts.unused > 0 && (
+      <div
+        className={`creator-media flex-1 flex flex-col min-h-0 transition-colors ${dragOver ? "bg-studio-accent/5" : ""}`}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={handleDrop}
+      >
+        {/* Header — matches design panel Section pattern */}
+        <div className="creator-media-header px-4 pt-2.5 pb-1.5 shrink-0">
+          <div className="creator-media-toolbar">
+            {/* Import */}
+            {onImport && (
               <>
-                <span className="w-px self-stretch bg-panel-input mx-0.5" aria-hidden="true" />
-                <button
-                  onClick={() => setUsageFilter(usageFilter === "used" ? "all" : "used")}
-                  className={`px-2.5 py-1 text-[11px] font-medium rounded-md transition-colors ${
-                    usageFilter === "used"
-                      ? "bg-panel-accent/15 text-accent-ink"
-                      : "bg-panel-input text-panel-text-3 hover:text-panel-text-1"
-                  }`}
-                >
-                  In use {usageCounts.used}
-                </button>
-                <button
-                  onClick={() => setUsageFilter(usageFilter === "unused" ? "all" : "unused")}
-                  className={`px-2.5 py-1 text-[11px] font-medium rounded-md transition-colors ${
-                    usageFilter === "unused"
-                      ? "bg-panel-accent/15 text-accent-ink"
-                      : "bg-panel-input text-panel-text-3 hover:text-panel-text-1"
-                  }`}
-                >
-                  Unused {usageCounts.unused}
-                </button>
+                <ImportButton importing={importing} onClick={() => fileInputRef.current?.click()} />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="video/*,image/*,audio/*,font/*"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files?.length) {
+                      void handleImport(e.target.files);
+                      e.target.value = "";
+                    }
+                  }}
+                />
               </>
             )}
-          </div>
-        )}
-      </div>
 
-      <div className="flex-1 overflow-y-auto mt-1">
-        {viewMode === "global" ? (
-          <GlobalAssetsView searchQuery={searchQuery} />
-        ) : mediaAssets.length === 0 ? (
-          <EmptyState searchQuery={searchQuery} onClearSearch={() => setSearchQuery("")} />
-        ) : (
-          visibleCategories.map((cat) => (
-            <div key={cat} className="mb-1">
-              {activeFilter === "all" && (
-                <div className="flex items-center gap-2 px-4 py-2 border-t border-panel-border">
-                  <h3 className="text-[12px] font-semibold text-panel-text-1">
-                    {CATEGORY_LABELS[cat]}
-                  </h3>
-                  <span className="text-[11px] text-panel-text-5">{categorized[cat].length}</span>
-                </div>
-              )}
-              {cat === "audio" &&
-                categorized[cat].map((a) => (
-                  <AudioRow
-                    key={a}
-                    projectId={projectId}
-                    asset={a}
-                    used={usedPaths.has(a)}
-                    meta={manifest.get(a)}
-                    onCopy={handleCopyPath}
-                    copyFeedback={copyFeedback}
-                    onDelete={onDelete}
-                    onRename={onRename}
-                    onAddAssetToTimeline={onAddAssetToTimeline}
-                  />
-                ))}
-              {(cat === "images" || cat === "video") && (
-                <div className="grid grid-cols-2 gap-1 px-2 pb-1">
-                  {categorized[cat].map((a) => (
-                    <AssetCard
+            {/* Search — gated on the UNFILTERED pool so it never unmounts itself */}
+            {(allMediaAssets.length > 0 || viewMode !== "local") && (
+              <SearchInput
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={
+                  viewMode === "stock"
+                    ? label("Search free media…", "Chercher dans la banque…")
+                    : label("Search assets...", "Rechercher des médias…")
+                }
+                aria-label={label("Search assets", "Rechercher des médias")}
+                className="mb-2"
+              />
+            )}
+            {viewMode === "local" && (
+              <MediaViewMenus
+                settings={view}
+                onChange={setView}
+                typeFilter={activeFilter}
+                onTypeFilter={setActiveFilter}
+                typeCounts={counts}
+                usageFilter={usageFilter}
+                onUsageFilter={setUsageFilter}
+                usageCounts={usageCounts}
+              />
+            )}
+            {viewMode === "library" && (
+              <MediaViewMenus
+                settings={view}
+                onChange={setView}
+                typeFilter={activeFilter}
+                onTypeFilter={setActiveFilter}
+                typeCounts={libraryTypeCounts(library.items ?? [])}
+              />
+            )}
+          </div>
+
+          {/* Left rail — navigation only: sources, then « Mes dossiers » */}
+          <div className="creator-media-rail">
+            <MediaSourceList
+              active={currentFolder ? null : viewMode}
+              onSelect={(view) => {
+                setFolderId(null);
+                setViewMode(view);
+              }}
+            />
+            <MediaFolderList
+              state={folderState}
+              projectId={projectId}
+              activeId={currentFolder?.id ?? null}
+              onSelect={(id) => {
+                setFolderId(id);
+                if (id) setViewMode("local");
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="creator-media-results flex-1 overflow-y-auto mt-1">
+          {(viewMode === "local" || viewMode === "library") && (
+            <ActiveMediaFilters
+              typeFilter={activeFilter}
+              usageFilter={viewMode === "local" ? usageFilter : "all"}
+              onClearType={() => setActiveFilter("all")}
+              onClearUsage={() => setUsageFilter("all")}
+            />
+          )}
+          {currentFolder && (
+            <FolderOtherProjects
+              folder={currentFolder}
+              projectId={projectId}
+              onImport={onImport ? handleImport : undefined}
+              onRemove={(item) => void folderState.removeItem(currentFolder.id, item)}
+            />
+          )}
+          {viewMode === "recordings" ? (
+            <RecordingsView onImport={onImport ? handleImport : undefined} />
+          ) : viewMode === "stock" ? (
+            <StockView
+              projectId={projectId}
+              searchQuery={searchQuery}
+              layout={view.layout}
+              onImport={onImport ? handleImport : undefined}
+            />
+          ) : viewMode === "library" ? (
+            <LibraryView
+              library={library}
+              searchQuery={searchQuery}
+              typeFilter={activeFilter}
+              view={view}
+              onImport={onImport ? handleImport : undefined}
+            />
+          ) : viewMode === "global" ? (
+            <GlobalAssetsView searchQuery={searchQuery} />
+          ) : currentFolder && mediaAssets.length === 0 && !searchQuery ? (
+            <FolderEmptyState hasElsewhere={currentFolder.items.length > 0} />
+          ) : mediaAssets.length === 0 ? (
+            <EmptyState searchQuery={searchQuery} onClearSearch={() => setSearchQuery("")} />
+          ) : (
+            visibleCategories.map((cat) => (
+              <div key={cat} className="mb-1">
+                {activeFilter === "all" && (
+                  <div className="flex items-center gap-2 px-4 py-2 border-t border-panel-border">
+                    <h3 className="text-[12px] font-semibold text-panel-text-1">
+                      {CATEGORY_LABELS[cat]}
+                    </h3>
+                    <span className="text-[11px] text-panel-text-5">{categorized[cat].length}</span>
+                  </div>
+                )}
+                {cat === "audio" &&
+                  categorized[cat].map((a) => (
+                    <AudioRow
                       key={a}
                       projectId={projectId}
                       asset={a}
                       used={usedPaths.has(a)}
-                      duration={manifest.get(a)?.duration}
+                      meta={manifest.get(a)}
                       onCopy={handleCopyPath}
                       copyFeedback={copyFeedback}
                       onDelete={onDelete}
@@ -505,25 +534,45 @@ export const AssetsTab = memo(function AssetsTab({
                       onAddAssetToTimeline={onAddAssetToTimeline}
                     />
                   ))}
-                </div>
-              )}
-              {cat === "fonts" &&
-                categorized[cat].map((a) => (
-                  <FontRow
-                    key={a}
-                    asset={a}
-                    used={usedPaths.has(a)}
-                    onCopy={handleCopyPath}
-                    copyFeedback={copyFeedback}
-                    onDelete={onDelete}
-                    onRename={onRename}
-                    onAddAssetToTimeline={onAddAssetToTimeline}
-                  />
-                ))}
-            </div>
-          ))
-        )}
+                {(cat === "images" || cat === "video") && (
+                  <div
+                    className="creator-media-grid grid grid-cols-2 gap-1 px-2 pb-1"
+                    data-layout={view.layout}
+                  >
+                    {categorized[cat].map((a) => (
+                      <AssetCard
+                        key={a}
+                        projectId={projectId}
+                        asset={a}
+                        used={usedPaths.has(a)}
+                        duration={manifest.get(a)?.duration}
+                        onCopy={handleCopyPath}
+                        copyFeedback={copyFeedback}
+                        onDelete={onDelete}
+                        onRename={onRename}
+                        onAddAssetToTimeline={onAddAssetToTimeline}
+                      />
+                    ))}
+                  </div>
+                )}
+                {cat === "fonts" &&
+                  categorized[cat].map((a) => (
+                    <FontRow
+                      key={a}
+                      asset={a}
+                      used={usedPaths.has(a)}
+                      onCopy={handleCopyPath}
+                      copyFeedback={copyFeedback}
+                      onDelete={onDelete}
+                      onRename={onRename}
+                      onAddAssetToTimeline={onAddAssetToTimeline}
+                    />
+                  ))}
+              </div>
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    </MediaFolderActionsContext.Provider>
   );
 });

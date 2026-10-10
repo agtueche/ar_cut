@@ -5,6 +5,7 @@ import { execFile } from "node:child_process";
 import { existsSync, readdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { findFfBinary } from "@hyperframes/parsers/ff-binaries";
 
 export type CheckStatus = "ok" | "missing";
 
@@ -18,7 +19,7 @@ export interface EnvironmentCheck {
 
 function firstLine(binary: string, args: string[]): Promise<string | null> {
   return new Promise((resolvePromise) => {
-    execFile(binary, args, { timeout: 8000, windowsHide: true }, (error, stdout, stderr) => {
+    execFile(binary, args, { timeout: 20000, windowsHide: true }, (error, stdout, stderr) => {
       if (error) {
         resolvePromise(null);
         return;
@@ -54,8 +55,8 @@ export async function checkEnvironment(
   findSystemChrome: () => string | undefined,
 ): Promise<EnvironmentCheck[]> {
   const [ffmpeg, ffprobe, whisper] = await Promise.all([
-    firstLine("ffmpeg", ["-version"]),
-    firstLine("ffprobe", ["-version"]),
+    firstLine(findFfBinary("ffmpeg") ?? "ffmpeg", ["-version"]),
+    firstLine(findFfBinary("ffprobe") ?? "ffprobe", ["-version"]),
     firstLine("whisper-cli", ["--help"]),
   ]);
   const browser = cachedHeadlessShell() ?? findSystemChrome() ?? null;

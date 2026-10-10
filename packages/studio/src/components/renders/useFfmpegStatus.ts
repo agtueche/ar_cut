@@ -37,8 +37,8 @@ export function ffmpegInstallMessage(status: FfmpegStatus | null): string {
   return remedy ? `${title}. Install it with: ${remedy}` : `${title}. Install FFmpeg to export.`;
 }
 
-// The Render panel unmounts on every right-panel tab switch, and each miss
-// re-probes the filesystem server-side. Remember the answer for the tab's life.
+// Keep successful checks across panel switches. A failed check may be transient
+// (for example while the machine is busy rendering), so never cache it for life.
 let cached: ProbeResult = null;
 
 const asText = (value: unknown): string | undefined =>
@@ -86,7 +86,7 @@ export function useFfmpegStatus(): {
   const run = useCallback(async () => {
     setChecking(true);
     const next = await probe();
-    cached = next;
+    cached = next?.ok ? next : null;
     if (!mounted.current) return;
     setStatus(next);
     setChecking(false);

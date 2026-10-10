@@ -4,6 +4,7 @@
 
 import { existsSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { defaultOwnership, readOwnership, type Owner, type Visibility } from "./ownership";
 
 /**
  * Hidden on purpose: Studio's history ignores dot-files, so Creator's bookkeeping
@@ -29,6 +30,9 @@ export interface CreatorManifest {
   template: string | null;
   lastOpenedAt: string | null;
   assistant: AssistantRequest[];
+  /** Who owns the project and who may see it (see ownership.ts). */
+  owner: Owner;
+  visibility: Visibility;
 }
 
 export interface CompositionInfo {
@@ -49,6 +53,8 @@ export interface ProjectSummary {
   modifiedAt: string;
   lastOpenedAt: string | null;
   renderCount: number;
+  owner: Owner;
+  visibility: Visibility;
 }
 
 const ROOT_TAG = /<[a-z][a-z0-9-]*\b[^>]*\bdata-composition-id\s*=\s*["'][^"']*["'][^>]*>/i;
@@ -94,6 +100,7 @@ export function defaultManifest(title: string, now = new Date()): CreatorManifes
     template: null,
     lastOpenedAt: null,
     assistant: [],
+    ...defaultOwnership(),
   };
 }
 
@@ -125,6 +132,7 @@ export function readManifest(projectDir: string, fallbackTitle: string): Creator
     template: typeof raw.template === "string" ? raw.template : null,
     lastOpenedAt: typeof raw.lastOpenedAt === "string" ? raw.lastOpenedAt : null,
     assistant: Array.isArray(raw.assistant) ? raw.assistant.filter(isAssistantRequest) : [],
+    ...readOwnership(raw),
   };
 }
 

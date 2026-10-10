@@ -29,6 +29,8 @@ import { commitTimelineCompositionInsertion } from "../utils/timelineComposition
 import { extendRootDurationInSource } from "../utils/rootDuration";
 import { deriveTimelineStoreKeyForDomId } from "../player/lib/timelineElementHelpers";
 import { selectAndRevealTimelineElement } from "../player/components/timelineDropReveal";
+import { takeDraggedSection, type DraggedSection } from "../creator/sourceMonitor/draggedSection";
+import { withMediaStart } from "../creator/sourceMonitor/sourceSectionEdit";
 
 /** The first uploaded file opens the new track (if asked); each next one aims right after the previous. */
 function fileDropPlacement(
@@ -97,6 +99,8 @@ export function useTimelineAssetDropOps({
       placement: TimelineDropPlacement,
       durationOverride?: number,
       gesture: DropGesture = { placed: [], onNewTrack: false },
+      /** A section dragged from the source monitor: its range and streams. */
+      section?: DraggedSection,
     ): Promise<TimelineElement | undefined> => {
       if (isRecordingRef?.current) {
         showToast("Cannot edit timeline while recording", "error");
@@ -109,7 +113,9 @@ export function useTimelineAssetDropOps({
       const pid = projectIdRef.current;
       if (!pid) throw new Error("No active project");
 
-      const kind = getTimelineAssetKind(assetPath);
+      const assetKind = getTimelineAssetKind(assetPath);
+      // « Son seul » from the monitor lands as an audio clip of the video file.
+      const kind = section?.streams === "audio" && assetKind === "video" ? "audio" : assetKind;
       if (!kind) {
         showToast("Only image, video, and audio assets can be dropped onto the timeline.");
         return undefined;
@@ -124,7 +130,10 @@ export function useTimelineAssetDropOps({
         const normalizedDuration = Number(formatTimelineAttributeNumber(duration));
         // A video with an audio stream lands audible; the mixer only hears a
         // <video> marked data-has-audio, and a muted drop was losing the sound.
-        const hasAudio = await resolveDroppedAssetHasAudio(pid, assetPath, kind);
+        const hasAudio =
+          section?.streams === "video"
+            ? false
+            : await resolveDroppedAssetHasAudio(pid, assetPath, kind);
         const resolvedAssetSrc = resolveTimelineAssetSrc(targetPath, assetPath);
 
         const resolvedTargetPath = targetPath || "index.html";
@@ -157,21 +166,24 @@ export function useTimelineAssetDropOps({
           return extendRootDurationInSource(
             insertTimelineAssetIntoSource(
               resolved.source,
-              buildTimelineAssetInsertHtml({
-                id: newId,
-                hfId: `hf-${generateId()}`,
-                assetPath: resolvedAssetSrc,
-                kind,
-                start,
-                duration: normalizedDuration,
-                track,
-                zIndex: newElementZIndex,
-                hasAudio,
-                geometry: fitTimelineAssetGeometry(
-                  null,
-                  resolveTimelineAssetCompositionSize(originalContent),
-                ),
-              }),
+              withMediaStart(
+                buildTimelineAssetInsertHtml({
+                  id: newId,
+                  hfId: `hf-${generateId()}`,
+                  assetPath: resolvedAssetSrc,
+                  kind,
+                  start,
+                  duration: normalizedDuration,
+                  track,
+                  zIndex: newElementZIndex,
+                  hasAudio,
+                  geometry: fitTimelineAssetGeometry(
+                    null,
+                    resolveTimelineAssetCompositionSize(originalContent),
+                  ),
+                }),
+                kind === "image" ? 0 : (section?.mediaStart ?? 0),
+              ),
             ),
             start + normalizedDuration,
           );
@@ -221,7 +233,14 @@ export function useTimelineAssetDropOps({
 
   const handleTimelineAssetDrop = useCallback(
     async (assetPath: string, placement: TimelineDropPlacement, durationOverride?: number) => {
-      await dropAssetAt(assetPath, placement, durationOverride);
+      const section = takeDraggedSection(assetPath) ?? undefined;
+      await dropAssetAt(
+        assetPath,
+        placement,
+        section?.duration ?? durationOverride,
+        undefined,
+        section,
+      );
     },
     [dropAssetAt],
   );

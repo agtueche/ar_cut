@@ -7,4 +7,6 @@ export const COMPOSITION_PALETTE = {
   text: "#F4F7F6",
   accent: "#00A896",
   action: "#FF6B35",
+  /** Subtitle text default: pure white reads best over footage. */
+  subtitleText: "#ffffff",
 } as const;

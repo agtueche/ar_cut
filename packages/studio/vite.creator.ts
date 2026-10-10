@@ -8,6 +8,13 @@ import { readNodeRequestBody } from "./vite.request-body.js";
 import { findSystemChrome } from "./vite.browser";
 import { handleCreatorRequest, type CreatorContext } from "./creator-server/router";
 import { checkEnvironment } from "./creator-server/environment";
+import { serveLibraryFile } from "./creator-server/sessionLibrary";
+import {
+  isRecordingKind,
+  receiveRecording,
+  serveRecordingFile,
+} from "./creator-server/sessionRecordings";
+import { fetchStockItem, isStockKind, streamStockFile } from "./creator-server/sessionStock";
 import {
   CREATOR_HOME_ENV,
   createWorkspace,
@@ -61,10 +68,62 @@ export function creatorApi(workspace: CreatorWorkspace): Plugin {
       // Two routes the CLI host serves and Studio's UI probes; the dev server had neither.
       server.middlewares.use((req, res, next) => {
         const path = req.url?.split("?")[0];
+        if (req.method === "POST" && path === `${PREFIX}/recordings/upload`) {
+          // « Enregistrements »: a take straight from MediaRecorder (raw audio/video body).
+          if (!isSameOrigin(req.headers.origin, req.headers.host)) {
+            sendJson(res, 403, { error: "Requête refusée." });
+            return;
+          }
+          const kind = new URL(req.url ?? "", "http://localhost").searchParams.get("kind");
+          void (async () => {
+            if (!isRecordingKind(kind)) throw new Error("Type d'enregistrement invalide.");
+            sendJson(res, 201, { path: await receiveRecording(ctx.workspace, kind, req) });
+          })().catch((error: unknown) => {
+            if (!res.headersSent)
+              sendJson(res, 409, {
+                error: error instanceof Error ? error.message : "Enregistrement impossible.",
+              });
+          });
+          return;
+        }
         if (req.method !== "GET") return next();
+        if (path?.startsWith(`${PREFIX}/recordings/file/`)) {
+          serveRecordingFile(
+            ctx.workspace,
+            decodeURIComponent(path.slice(`${PREFIX}/recordings/file/`.length)),
+            req,
+            res,
+          );
+          return;
+        }
         if (path === "/api/open-in-desktop") {
           // The HeyGen desktop app hand-off is not part of Creator: hide its button.
           sendJson(res, 200, { available: false, handoff: false, downloadUrl: null });
+          return;
+        }
+        const stockFile = path
+          ? /^\/api\/creator\/stock\/file\/([a-z]+)\/([a-z]+)\/([A-Za-z0-9-]{1,64})$/.exec(path)
+          : null;
+        if (stockFile) {
+          // « Banque libre de droits »: the file, re-fetched from its provider by id.
+          const [, kind, provider, id] = stockFile;
+          void (async () => {
+            if (!isStockKind(kind)) throw new Error("Catégorie invalide.");
+            const item = await fetchStockItem(kind, provider, id);
+            await streamStockFile(item, res);
+          })().catch((error: unknown) => {
+            if (!res.headersSent)
+              sendJson(res, 409, {
+                error: error instanceof Error ? error.message : "Téléchargement impossible.",
+              });
+            else res.destroy();
+          });
+          return;
+        }
+        if (path?.startsWith(`${PREFIX}/library/file/`)) {
+          // "Ma bibliothèque" media: streamed with byte ranges (audio/video seeking).
+          const rel = decodeURIComponent(path.slice(`${PREFIX}/library/file/`.length));
+          serveLibraryFile(ctx.workspace, rel, req, res);
           return;
         }
         if (path !== "/api/environment/ffmpeg") return next();

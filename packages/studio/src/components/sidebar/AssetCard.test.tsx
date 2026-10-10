@@ -7,6 +7,7 @@ import { usePlayerStore, type TimelineElement } from "../../player/store/playerS
 import { useAssetPreviewStore } from "../../utils/assetPreviewStore";
 import { AssetCard } from "./AssetCard";
 import { AudioRow } from "./AudioRow";
+import { readSourceMonitorRequest } from "../../creator/sourceMonitorRequest";
 
 (globalThis as unknown as { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -55,25 +56,62 @@ describe("AssetCard click behavior", () => {
     copyFeedback: null,
   };
 
-  it("clears an open preview overlay when clicking an already-added asset (reveal branch)", () => {
-    usePlayerStore.getState().setElements([clip({ id: "img1", src: "assets/logo.png" })]);
-    // Preview overlay is open on ANOTHER asset — the reveal must dismiss it,
-    // or it stays stuck over the canvas while the timeline reveals the clip.
+  it("opens the clicked video in the source monitor and closes the old preview", () => {
     useAssetPreviewStore.getState().setPreviewAsset("assets/other.png", "p1");
-
-    const host = mount(<AssetCard {...cardProps} asset="assets/logo.png" used />);
+    const host = mount(<AssetCard {...cardProps} asset="assets/plans/V07.mp4" used={false} />);
     clickCard(host);
 
     expect(useAssetPreviewStore.getState().previewAsset).toBeNull();
-    expect(usePlayerStore.getState().selectedElementId).toBe("img1");
+    expect(readSourceMonitorRequest()?.path).toBe("assets/plans/V07.mp4");
   });
 
-  it("opens the preview overlay for a not-yet-added asset", () => {
-    const host = mount(<AssetCard {...cardProps} asset="assets/logo.png" used={false} />);
+  it("opens an asset already on the timeline in the monitor too", () => {
+    usePlayerStore.getState().setElements([clip({ id: "img1", src: "assets/logo.png" })]);
+    const host = mount(<AssetCard {...cardProps} asset="assets/logo.png" used />);
     clickCard(host);
 
-    expect(useAssetPreviewStore.getState().previewAsset).toBe("assets/logo.png");
-    expect(useAssetPreviewStore.getState().previewProjectId).toBe("p1");
+    expect(readSourceMonitorRequest()?.path).toBe("assets/logo.png");
+  });
+});
+
+describe("AssetCard « + » button", () => {
+  it("adds the video to the timeline without opening the preview", () => {
+    const onAdd = vi.fn();
+    const host = mount(
+      <AssetCard
+        projectId="p1"
+        onCopy={vi.fn()}
+        copyFeedback={null}
+        asset="assets/plans/V07.mp4"
+        used={false}
+        duration={10}
+        onAddAssetToTimeline={onAdd}
+      />,
+    );
+    const plus = host.querySelector<HTMLButtonElement>('button[title="Add to the timeline"]');
+    if (!plus) throw new Error("Expected the « + » button on the thumbnail");
+    const PointerCtor = (window as { PointerEvent?: typeof MouseEvent }).PointerEvent ?? MouseEvent;
+    act(() => {
+      plus.dispatchEvent(new PointerCtor("pointerdown", { bubbles: true, clientX: 5, clientY: 5 }));
+      plus.dispatchEvent(new PointerCtor("pointerup", { bubbles: true, clientX: 5, clientY: 5 }));
+      plus.click();
+    });
+    expect(onAdd).toHaveBeenCalledWith("assets/plans/V07.mp4");
+    expect(useAssetPreviewStore.getState().previewAsset).toBeNull();
+  });
+
+  it("is absent when the panel cannot add to the timeline", () => {
+    const host = mount(
+      <AssetCard
+        projectId="p1"
+        onCopy={vi.fn()}
+        copyFeedback={null}
+        asset="assets/a.mp4"
+        used={false}
+        duration={3}
+      />,
+    );
+    expect(host.querySelector('button[title="Add to the timeline"]')).toBeNull();
   });
 });
 
@@ -84,23 +122,12 @@ describe("AudioRow click behavior", () => {
     copyFeedback: null,
   };
 
-  it("clears an open preview overlay when clicking an already-added audio asset (reveal branch)", () => {
-    usePlayerStore
-      .getState()
-      .setElements([clip({ id: "bgm1", tag: "audio", src: "assets/bgm.mp3" })]);
+  it("opens the clicked sound in the source monitor", () => {
     useAssetPreviewStore.getState().setPreviewAsset("assets/other.mp3", "p1");
-
-    const host = mount(<AudioRow {...rowProps} asset="assets/bgm.mp3" used />);
-    clickCard(host);
-
-    expect(useAssetPreviewStore.getState().previewAsset).toBeNull();
-    expect(usePlayerStore.getState().selectedElementId).toBe("bgm1");
-  });
-
-  it("opens the preview overlay for a not-yet-added audio asset", () => {
     const host = mount(<AudioRow {...rowProps} asset="assets/bgm.mp3" used={false} />);
     clickCard(host);
 
-    expect(useAssetPreviewStore.getState().previewAsset).toBe("assets/bgm.mp3");
+    expect(useAssetPreviewStore.getState().previewAsset).toBeNull();
+    expect(readSourceMonitorRequest()?.path).toBe("assets/bgm.mp3");
   });
 });
